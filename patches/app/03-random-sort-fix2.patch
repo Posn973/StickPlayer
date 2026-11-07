@@ -1,0 +1,100 @@
+diff --git a/application/television/src/main/java/org/videolan/television/ui/browser/FileBrowserTvFragment.kt b/application/television/src/main/java/org/videolan/television/ui/browser/FileBrowserTvFragment.kt
+index 6d8c5ee..5e0a974 100644
+--- a/application/television/src/main/java/org/videolan/television/ui/browser/FileBrowserTvFragment.kt
++++ b/application/television/src/main/java/org/videolan/television/ui/browser/FileBrowserTvFragment.kt
+@@ -132,14 +132,22 @@ class FileBrowserTvFragment : BaseBrowserTvFragment<MediaLibraryItem>(), PathAda
+             if (items == null) return@observe
+             val lm = binding.list.layoutManager as LinearLayoutManager
+             val selectedItem = lm.focusedChild
+-            submitList(items)
+-            if (focusTopOnNextUpdate) {
++            val randomReshuffle = focusTopOnNextUpdate
++            if (randomReshuffle) {
+                 focusTopOnNextUpdate = false
+-                binding.list.post {
++                // Random sort: no diff (too slow with thousands of files) and focus the first item
++                // only after the new order is actually displayed.
++                @Suppress("UNCHECKED_CAST")
++                val newList = items as List<MediaWrapper>
++                (adapter as FileTvItemAdapter).updateFull(newList) {
+                     lm.scrollToPositionWithOffset(0, 0)
+-                    binding.list.post { lm.findViewByPosition(0)?.requestFocus() }
++                    binding.list.post {
++                        lm.findViewByPosition(0)?.requestFocus()
++                            ?: binding.list.postDelayed({ lm.findViewByPosition(0)?.requestFocus() }, 150)
++                    }
+                 }
+-            } else binding.list.post {
++            } else submitList(items)
++            if (!randomReshuffle) binding.list.post {
+                 for (i in 0 until lm.childCount) {
+                     if (lm.getChildAt(i) == selectedItem) {
+                         lm.getChildAt(i)?.requestFocus()
+diff --git a/application/vlc-android/src/org/videolan/vlc/gui/DiffUtilAdapter.kt b/application/vlc-android/src/org/videolan/vlc/gui/DiffUtilAdapter.kt
+index 5434f2c..510a373 100644
+--- a/application/vlc-android/src/org/videolan/vlc/gui/DiffUtilAdapter.kt
++++ b/application/vlc-android/src/org/videolan/vlc/gui/DiffUtilAdapter.kt
+@@ -1,5 +1,6 @@
+ package org.videolan.vlc.gui
+ 
++import android.annotation.SuppressLint
+ import androidx.annotation.MainThread
+ import androidx.recyclerview.widget.DiffUtil
+ import androidx.recyclerview.widget.RecyclerView
+@@ -14,27 +15,46 @@ abstract class DiffUtilAdapter<D, VH : RecyclerView.ViewHolder> : RecyclerView.A
+     private set
+     private val diffCallback by lazy(LazyThreadSafetyMode.NONE) { createCB() }
+ 
++    private class PendingUpdate<D>(val list: List<D>, val fullRefresh: Boolean, val onApplied: (() -> Unit)?)
++
+     @OptIn(ObsoleteCoroutinesApi::class)
+-    private val updateActor = actor<List<D>>(capacity = Channel.CONFLATED) {
+-        for (list in channel) internalUpdate(list)
++    private val updateActor = actor<PendingUpdate<D>>(capacity = Channel.CONFLATED) {
++        for (pending in channel) internalUpdate(pending)
+     }
+     protected open fun onUpdateFinished() {}
+ 
+     @MainThread
+     fun update (list: List<D>) {
+-        updateActor.trySend(list)
++        updateActor.trySend(PendingUpdate(list, false, null))
++    }
++
++    /**
++     * Replace the whole list without computing a diff (fast for big reordered lists, e.g. random sort)
++     * and call [onApplied] once the new list is really displayed.
++     */
++    @MainThread
++    fun updateFull(list: List<D>, onApplied: (() -> Unit)? = null) {
++        updateActor.trySend(PendingUpdate(list, true, onApplied))
+     }
+ 
++    @SuppressLint("NotifyDataSetChanged")
+     @MainThread
+-    private suspend fun internalUpdate(list: List<D>) {
+-        val (finalList, result) = withContext(Dispatchers.Default) {
+-            val finalList = prepareList(list)
+-            val result = DiffUtil.calculateDiff(diffCallback.apply { update(dataset, finalList) }, detectMoves())
+-            Pair(finalList, result)
++    private suspend fun internalUpdate(pending: PendingUpdate<D>) {
++        val list = pending.list
++        if (pending.fullRefresh) {
++            dataset = withContext(Dispatchers.Default) { prepareList(list) }
++            notifyDataSetChanged()
++        } else {
++            val (finalList, result) = withContext(Dispatchers.Default) {
++                val finalList = prepareList(list)
++                val result = DiffUtil.calculateDiff(diffCallback.apply { update(dataset, finalList) }, detectMoves())
++                Pair(finalList, result)
++            }
++            dataset = finalList
++            result.dispatchUpdatesTo(this@DiffUtilAdapter)
+         }
+-        dataset = finalList
+-        result.dispatchUpdatesTo(this@DiffUtilAdapter)
+         onUpdateFinished()
++        pending.onApplied?.invoke()
+     }
+ 
+     protected open fun prepareList(list: List<D>) : List<D> = list.toList()

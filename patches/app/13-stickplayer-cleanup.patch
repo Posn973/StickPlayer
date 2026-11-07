@@ -1,0 +1,297 @@
+diff --git a/application/resources/src/main/res/drawable/ic_about_logo.xml b/application/resources/src/main/res/drawable/ic_about_logo.xml
+index 0e71c61..26afabe 100644
+--- a/application/resources/src/main/res/drawable/ic_about_logo.xml
++++ b/application/resources/src/main/res/drawable/ic_about_logo.xml
+@@ -1,16 +1,31 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!-- Stick Player: replaces the VLC cone (TV + play button, based on the Stick Player icon) -->
+ <vector xmlns:android="http://schemas.android.com/apk/res/android"
+-        xmlns:tools="http://schemas.android.com/tools"
+-        android:width="112dp"
+-        android:height="112dp"
+-        android:viewportWidth="108"
+-        android:viewportHeight="108">
+-    <path
+-            android:fillColor="@color/white"
+-            android:pathData="m63.223,18.858c-6.938,3.66 -11.714,3.347 -18.408,0l-5.857,17.571c5.02,3.765 9.699,5.648 15.061,5.648 5.362,0 10.041,-1.883 15.061,-5.648zM28.918,66.551c0,0 -1.115,3.347 -1.673,5.02 -0.837,2.51 -1.262,3.785 0,5.02 6.74,6.595 17.337,9.201 26.775,9.204 9.431,0.002 20.081,-2.51 26.763,-9.183 1.209,-1.392 0.821,-2.613 0.012,-5.042 -0.557,-1.674 -1.673,-5.02 -1.673,-5.02L75.774,56.51c-6.694,6.694 -13.985,8.367 -21.755,8.367 -7.769,0 -15.061,-1.673 -21.755,-8.367z"
+-            android:strokeWidth="0.20917918" />
+-    <path
+-            android:fillColor="?attr/colorPrimary"
+-            android:pathData="m54.002,5.47c-2.092,0 -3.465,0.931 -4.602,2.093 -1.573,1.607 -2.928,6.276 -2.928,6.276l-1.674,5.018c6.694,3.347 11.471,3.66 18.409,0l-1.674,-5.018c0,0 -1.355,-4.669 -2.928,-6.276 -1.138,-1.162 -2.51,-2.093 -4.602,-2.093zM38.94,36.428 L32.249,56.511c6.693,6.692 13.984,8.366 21.753,8.366 7.769,0 15.059,-1.672 21.753,-8.366L69.063,36.428c-5.02,3.765 -9.7,5.649 -15.061,5.649 -5.362,0 -10.041,-1.884 -15.061,-5.649zM21.786,66.55c-2.225,0 -4.331,1.946 -5.018,4.183L9.445,95.834c-0.978,3.354 -0.627,6.696 3.975,6.696h40.582,40.582c4.602,0 4.949,-3.342 3.971,-6.696l-7.319,-25.101c-0.687,-2.237 -2.797,-4.183 -5.022,-4.183h-7.111c0,0 1.117,3.348 1.674,5.022 0.808,2.429 1.197,3.65 -0.012,5.042 -6.682,6.672 -17.331,9.183 -26.763,9.181 -9.438,-0.002 -20.035,-2.609 -26.775,-9.205 -1.262,-1.235 -0.837,-2.507 0,-5.018 0.558,-1.673 1.674,-5.022 1.674,-5.022z"
+-            android:strokeWidth="0.20917918"
+-            tools:fillColor="@color/orange500" />
++    xmlns:aapt="http://schemas.android.com/aapt"
++    android:width="112dp"
++    android:height="112dp"
++    android:viewportWidth="48"
++    android:viewportHeight="48">
++    <group android:rotation="-15" android:pivotX="24" android:pivotY="22">
++        <path android:pathData="M9.15,30.49 A21,12 0 1 1 37.50,31.19" android:strokeWidth="2.6" android:strokeLineCap="round" android:fillColor="#00000000">
++            <aapt:attr name="android:strokeColor">
++                <gradient android:type="linear" android:startX="3" android:startY="20" android:endX="45" android:endY="20">
++                    <item android:offset="0" android:color="#FF00E5FF" />
++                    <item android:offset="0.55" android:color="#FF2F5BFF" />
++                    <item android:offset="1" android:color="#FFC02CFF" />
++                </gradient>
++            </aapt:attr>
++        </path>
++    </group>
++    <path android:pathData="M11,12 H37 A4,4 0 0 1 41,16 V32 A4,4 0 0 1 37,36 H11 A4,4 0 0 1 7,32 V16 A4,4 0 0 1 11,12 Z" android:fillColor="#FF22B8FF" />
++    <path android:pathData="M12,15 H36 A2,2 0 0 1 38,17 V31 A2,2 0 0 1 36,33 H12 A2,2 0 0 1 10,31 V17 A2,2 0 0 1 12,15 Z">
++        <aapt:attr name="android:fillColor">
++            <gradient android:type="linear" android:startX="10" android:startY="15" android:endX="38" android:endY="33">
++                <item android:offset="0" android:color="#FF1E5BFF" />
++                <item android:offset="1" android:color="#FF8A2BFF" />
++            </gradient>
++        </aapt:attr>
++    </path>
++    <path android:pathData="M13,36 L16.5,36 L13.5,41 L10,41 Z M31.5,36 L35,36 L38,41 L34.5,41 Z" android:fillColor="#FF22B8FF" />
++    <path android:pathData="M20.5,19.8 L29.8,24 L20.5,28.2 Z" android:fillColor="#FFFFFFFF" />
+ </vector>
+diff --git a/application/resources/src/main/res/drawable/ic_cone_o.xml b/application/resources/src/main/res/drawable/ic_cone_o.xml
+index d0d75f9..6304c58 100644
+--- a/application/resources/src/main/res/drawable/ic_cone_o.xml
++++ b/application/resources/src/main/res/drawable/ic_cone_o.xml
+@@ -1,35 +1,16 @@
+-<!--
+-  ~ *************************************************************************
+-  ~  ic_cone_o.xml
+-  ~ **************************************************************************
+-  ~ Copyright © 2020 VLC authors and VideoLAN
+-  ~ Author: Nicolas POMEPUY
+-  ~ This program is free software; you can redistribute it and/or modify
+-  ~ it under the terms of the GNU General Public License as published by
+-  ~ the Free Software Foundation; either version 2 of the License, or
+-  ~ (at your option) any later version.
+-  ~
+-  ~ This program is distributed in the hope that it will be useful,
+-  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-  ~ GNU General Public License for more details.
+-  ~
+-  ~ You should have received a copy of the GNU General Public License
+-  ~ along with this program; if not, write to the Free Software
+-  ~ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
+-  ~ ***************************************************************************
+-  ~
+-  ~
+-  -->
+-
+-<vector android:height="46dp"
+-        android:viewportHeight="130"
+-        android:viewportWidth="130"
+-        android:width="46dp"
+-        xmlns:android="http://schemas.android.com/apk/res/android">
+-    <path
+-            android:fillAlpha="1"
+-            android:fillColor="#ff8800"
+-            android:pathData="m65,8.759c-1.511,0 -3.023,0.368 -4.219,1.107 -2.675,1.653 -4.219,8.437 -4.219,8.437l-2.531,7.594c7.312,4.599 14.625,4.647 21.937,0l-2.531,-7.594c0,0 -1.544,-6.784 -4.219,-8.437 -1.196,-0.739 -2.707,-1.107 -4.219,-1.107zM47.281,46.148 L38.844,71.46c17.304,11.159 34.739,11.376 52.312,0l-8.438,-25.313c-11.912,8.861 -23.725,8.889 -35.437,0zM22.812,81.585 L11,121.241l108,0 -11.813,-39.656 -12.656,0 1.687,5.063c0,0 1.402,4.523 0,5.906 -14.817,14.618 -47.819,13.973 -62.437,-0.844 -1.185,-1.201 0,-5.063 0,-5.063l1.687,-5.063 -12.656,0z"
+-            android:strokeColor="#00000000" />
++<?xml version="1.0" encoding="utf-8"?>
++<!-- Stick Player: replaces the VLC cone (TV + play button, based on the Stick Player icon) -->
++<vector xmlns:android="http://schemas.android.com/apk/res/android"
++    android:width="46dp"
++    android:height="46dp"
++    android:viewportWidth="48"
++    android:viewportHeight="48">
++    <group android:translateY="0">
++        <group android:rotation="-15" android:pivotX="24" android:pivotY="22">
++            <path android:pathData="M9.15,30.49 A21,12 0 1 1 37.50,31.19" android:strokeWidth="2.6" android:strokeLineCap="round" android:strokeColor="#FF2EA8FF" android:strokeAlpha="1" android:fillColor="#00000000" />
++        </group>
++        <path android:pathData="M11,12 H37 A4,4 0 0 1 41,16 V32 A4,4 0 0 1 37,36 H11 A4,4 0 0 1 7,32 V16 A4,4 0 0 1 11,12 Z M12,15 H36 A2,2 0 0 1 38,17 V31 A2,2 0 0 1 36,33 H12 A2,2 0 0 1 10,31 V17 A2,2 0 0 1 12,15 Z" android:fillType="evenOdd" android:fillColor="#FF2EA8FF" android:fillAlpha="1" />
++        <path android:pathData="M13,36 L16.5,36 L13.5,41 L10,41 Z M31.5,36 L35,36 L38,41 L34.5,41 Z" android:fillColor="#FF2EA8FF" android:fillAlpha="1" />
++        <path android:pathData="M20.5,19.8 L29.8,24 L20.5,28.2 Z" android:fillColor="#FF2EA8FF" android:fillAlpha="1" />
++    </group>
+ </vector>
+diff --git a/application/resources/src/main/res/drawable/ic_default_cone.xml b/application/resources/src/main/res/drawable/ic_default_cone.xml
+index a756eb4..2b89c0c 100644
+--- a/application/resources/src/main/res/drawable/ic_default_cone.xml
++++ b/application/resources/src/main/res/drawable/ic_default_cone.xml
+@@ -1,53 +1,31 @@
+-<!--
+-  ~ *************************************************************************
+-  ~  ic_default_cone.xml
+-  ~ **************************************************************************
+-  ~ Copyright © 2020 VLC authors and VideoLAN
+-  ~ Author: Nicolas POMEPUY
+-  ~ This program is free software; you can redistribute it and/or modify
+-  ~ it under the terms of the GNU General Public License as published by
+-  ~ the Free Software Foundation; either version 2 of the License, or
+-  ~ (at your option) any later version.
+-  ~
+-  ~ This program is distributed in the hope that it will be useful,
+-  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-  ~ GNU General Public License for more details.
+-  ~
+-  ~ You should have received a copy of the GNU General Public License
+-  ~ along with this program; if not, write to the Free Software
+-  ~ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
+-  ~ ***************************************************************************
+-  ~
+-  ~
+-  -->
+-
+-<vector android:height="96dp"
+-        android:viewportHeight="48"
+-        android:viewportWidth="48"
+-        android:width="96dp"
+-        xmlns:android="http://schemas.android.com/apk/res/android">
+-    <group>
+-        <clip-path android:pathData="m24,6c-0.7759,0 -1.2849,0.3448 -1.7069,0.7759 -0.5834,0.596 -1.0862,2.3276 -1.0862,2.3276l-6.5172,19.5517 -2.6379,0c-0.8252,0 -1.6072,0.7221 -1.8621,1.5517L7.4741,39.5173c-0.3628,1.244 -0.2328,2.4828 1.4741,2.4828l15.0517,0 15.0517,0c1.7069,-0 1.837,-1.2387 1.4741,-2.4828L37.8103,30.2069c-0.2549,-0.8296 -1.0368,-1.5517 -1.8621,-1.5517l-2.6379,0 -6.5172,-19.5517c0,0 -0.5028,-1.7316 -1.0862,-2.3276 -0.422,-0.431 -0.931,-0.7759 -1.7069,-0.7759z M 0,0" />
+-        <path
+-                android:fillColor="#ff8800"
+-                android:pathData="m24,6c-0.7759,0 -1.2849,0.3448 -1.7069,0.7759 -0.5834,0.596 -1.0862,2.3276 -1.0862,2.3276l-6.5172,19.5517 -2.6379,0c-0.8252,0 -1.6072,0.7221 -1.8621,1.5517L7.4741,39.5173c-0.3628,1.244 -0.2328,2.4828 1.4741,2.4828l15.0517,0 15.0517,0c1.7069,-0 1.837,-1.2387 1.4741,-2.4828L37.8103,30.2069c-0.2549,-0.8296 -1.0368,-1.5517 -1.8621,-1.5517l-2.6379,0 -6.5172,-19.5517c0,0 -0.5028,-1.7316 -1.0862,-2.3276 -0.422,-0.431 -0.931,-0.7759 -1.7069,-0.7759z" />
+-        <path
+-                android:fillAlpha="1"
+-                android:fillColor="#f46e00"
+-                android:pathData="m33.3103,28.6552c0,0 0.414,1.2412 0.6207,1.8621 0.2999,0.9009 0.4439,1.3538 -0.0044,1.8699C31.4483,34.862 27.4982,35.7941 24,35.7931 20.4995,35.7921 16.5689,34.8256 14.069,32.3793l9,9 -15.5536,0c0.2318,0.378 0.6778,0.6207 1.4329,0.6207l15.0517,0 15.0517,0c1.7069,-0 1.837,-1.2387 1.4741,-2.4828L37.8103,30.2069c-0.2549,-0.8296 -1.0368,-1.5517 -1.8621,-1.5517l-2.6379,0z" />
+-        <path
+-                android:fillColor="#fafafa"
+-                android:pathData="m18.4138,17.4828c1.8621,1.3966 3.5975,2.0948 5.5862,2.0948 1.9887,0 3.7241,-0.6983 5.5862,-2.0948 3.7241,0 2.4828,-8.3793 -2.1724,-6.5172 -2.5734,1.3574 -4.3448,1.2414 -6.8276,0 -4.6552,-1.8621 -5.8966,6.5172 -2.1724,6.5172zM14.6897,28.6552c0,0 -0.4137,1.2414 -0.6207,1.8621 -0.3105,0.9311 -0.4681,1.404 0,1.8621 2.4999,2.4462 6.4306,3.4128 9.931,3.4138 3.4982,0.001 7.4483,-0.931 9.9266,-3.4059C34.3749,31.8711 34.231,31.4182 33.931,30.5173c-0.2067,-0.6209 -0.6207,-1.8621 -0.6207,-1.8621 2.1724,0 0,-5.2759 -1.2414,-3.7241 -2.4828,2.4828 -5.1872,3.1034 -8.069,3.1034 -2.8817,0 -5.5862,-0.6207 -8.069,-3.1034 -1.2414,-1.2414 -3.4138,3.7241 -1.2414,3.7241z" />
+-        <path
+-                android:fillAlpha="0.18823531"
+-                android:fillColor="#ffffff"
+-                android:fillType="evenOdd"
+-                android:pathData="m15.931,28.3448c-1.293,4.002 4.11,4.4492 4.6271,1.5424L24.3103,8.7931c0.3467,-1.9491 -1.1885,-2.7057 -1.8621,-0.6207z"
+-                android:strokeAlpha="0.6"
+-                android:strokeColor="#00000000"
+-                android:strokeLineCap="butt"
+-                android:strokeLineJoin="miter"
+-                android:strokeWidth="1" />
++<?xml version="1.0" encoding="utf-8"?>
++<!-- Stick Player: replaces the VLC cone (TV + play button, based on the Stick Player icon) -->
++<vector xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:aapt="http://schemas.android.com/aapt"
++    android:width="96dp"
++    android:height="96dp"
++    android:viewportWidth="48"
++    android:viewportHeight="48">
++    <group android:rotation="-15" android:pivotX="24" android:pivotY="22">
++        <path android:pathData="M9.15,30.49 A21,12 0 1 1 37.50,31.19" android:strokeWidth="2.6" android:strokeLineCap="round" android:fillColor="#00000000">
++            <aapt:attr name="android:strokeColor">
++                <gradient android:type="linear" android:startX="3" android:startY="20" android:endX="45" android:endY="20">
++                    <item android:offset="0" android:color="#FF00E5FF" />
++                    <item android:offset="0.55" android:color="#FF2F5BFF" />
++                    <item android:offset="1" android:color="#FFC02CFF" />
++                </gradient>
++            </aapt:attr>
++        </path>
+     </group>
++    <path android:pathData="M11,12 H37 A4,4 0 0 1 41,16 V32 A4,4 0 0 1 37,36 H11 A4,4 0 0 1 7,32 V16 A4,4 0 0 1 11,12 Z" android:fillColor="#FF22B8FF" />
++    <path android:pathData="M12,15 H36 A2,2 0 0 1 38,17 V31 A2,2 0 0 1 36,33 H12 A2,2 0 0 1 10,31 V17 A2,2 0 0 1 12,15 Z">
++        <aapt:attr name="android:fillColor">
++            <gradient android:type="linear" android:startX="10" android:startY="15" android:endX="38" android:endY="33">
++                <item android:offset="0" android:color="#FF1E5BFF" />
++                <item android:offset="1" android:color="#FF8A2BFF" />
++            </gradient>
++        </aapt:attr>
++    </path>
++    <path android:pathData="M13,36 L16.5,36 L13.5,41 L10,41 Z M31.5,36 L35,36 L38,41 L34.5,41 Z" android:fillColor="#FF22B8FF" />
++    <path android:pathData="M20.5,19.8 L29.8,24 L20.5,28.2 Z" android:fillColor="#FFFFFFFF" />
+ </vector>
+diff --git a/application/resources/src/main/res/drawable/ic_renderer_background_cone.xml b/application/resources/src/main/res/drawable/ic_renderer_background_cone.xml
+index 27f8779..7cc756b 100644
+--- a/application/resources/src/main/res/drawable/ic_renderer_background_cone.xml
++++ b/application/resources/src/main/res/drawable/ic_renderer_background_cone.xml
+@@ -1,40 +1,16 @@
+-<!--
+-  ~ *************************************************************************
+-  ~  ic_renderer_background_cone.xml
+-  ~ **************************************************************************
+-  ~ Copyright © 2020 VLC authors and VideoLAN
+-  ~ Author: Nicolas POMEPUY
+-  ~ This program is free software; you can redistribute it and/or modify
+-  ~ it under the terms of the GNU General Public License as published by
+-  ~ the Free Software Foundation; either version 2 of the License, or
+-  ~ (at your option) any later version.
+-  ~
+-  ~ This program is distributed in the hope that it will be useful,
+-  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-  ~ GNU General Public License for more details.
+-  ~
+-  ~ You should have received a copy of the GNU General Public License
+-  ~ along with this program; if not, write to the Free Software
+-  ~ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
+-  ~ ***************************************************************************
+-  ~
+-  ~
+-  -->
+-
+-<vector android:height="600dp"
+-        android:viewportHeight="320"
+-        android:viewportWidth="272"
+-        android:width="510dp"
+-        xmlns:android="http://schemas.android.com/apk/res/android">
+-    <path
+-            android:fillAlpha="0.85098039"
+-            android:fillColor="#ff8800"
+-            android:fillType="evenOdd"
+-            android:pathData="m116,40c-6.648,0 -12,5.352 -12,12v28h12L116,52L220,52v88h-44v12L220,152c6.648,0 12,-5.352 12,-12v-88c0,-6.648 -5.352,-12 -12,-12zM128,64v20.219c20.45,7.25 36.54,23.334 43.797,43.781h36.203v-64zM104,92v12c26.51,0 48,21.49 48,48h12c0,-33.138 -26.863,-60 -60,-60zM104,116v12c13.255,0 24,10.745 24,24h12c0,-19.882 -16.118,-36 -36,-36zM104,140c-1.651,0 -3.487,0.193 -4.809,1.188 -2.613,1.97 -3.67,5.132 -5.945,11.963 -2.276,6.831 -2.375,7.176 -2.375,7.176 9.505,4.786 16.406,5.234 26.258,0 0,0 -0.108,-0.371 -2.375,-7.176 -2.267,-6.805 -3.316,-9.946 -5.945,-11.963 -1.313,-1.008 -3.158,-1.188 -4.809,-1.188zM82.554,185.458v0l-9.504,28.714 -0.02,0.067c0.042,-0.02 0.074,-0.028 0.117,-0.038 17.822,15.557 43.963,15.56 61.785,0 0.012,0 0.021,0.02 0.031,0.02l-0.016,-0.048 -9.504,-28.711c-0.006,0 -0.014,0.02 -0.02,0.02 -14.415,10.84 -28.613,10.744 -42.871,-0.028zM58.277,228.535c-3.159,0 -6.096,2.4 -7.02,5.571l-5.535,18.966c-1.808,6.223 -3.601,12.4 -5.418,18.655 -0.76,2.614 0,4.536 1.227,5.866 0.76,0.823 1.699,1.421 2.563,1.818 0.864,0.387 1.452,0.59 2.133,0.59 1.587,0 29.287,-0.02 57.774,-0.02 28.486,0 56.187,0.02 57.774,0.02 0.68,0 1.269,-0.203 2.133,-0.59 0.863,-0.397 1.803,-0.995 2.563,-1.818 1.226,-1.329 1.987,-3.251 1.227,-5.866 -1.817,-6.255 -3.61,-12.432 -5.418,-18.655l-5.535,-18.966c-0.923,-3.171 -3.86,-5.571 -7.02,-5.571h-10.023c-0.004,0.02 -0.01,0.02 -0.016,0.032 0,0 1.584,4.782 2.375,7.176 1.148,3.474 1.716,5.193 0,7.184 -8.354,8.413 -21.685,12.901 -35.309,13.423 -15.441,0.596 -31.16,-3.991 -40.731,-13.423 -1.792,-1.766 -1.189,-3.593 0,-7.184 0.792,-2.393 2.281,-7.207 2.281,-7.207z"
+-            android:strokeAlpha="1"
+-            android:strokeColor="#00000000"
+-            android:strokeLineCap="butt"
+-            android:strokeLineJoin="round"
+-            android:strokeWidth="16.00003433" />
++<?xml version="1.0" encoding="utf-8"?>
++<!-- Stick Player: replaces the VLC cone (TV + play button, based on the Stick Player icon) -->
++<vector xmlns:android="http://schemas.android.com/apk/res/android"
++    android:width="510dp"
++    android:height="600dp"
++    android:viewportWidth="48"
++    android:viewportHeight="56.5">
++    <group android:translateY="4">
++        <group android:rotation="-15" android:pivotX="24" android:pivotY="22">
++            <path android:pathData="M9.15,30.49 A21,12 0 1 1 37.50,31.19" android:strokeWidth="2.6" android:strokeLineCap="round" android:strokeColor="#FF2EA8FF" android:strokeAlpha="0.85" android:fillColor="#00000000" />
++        </group>
++        <path android:pathData="M11,12 H37 A4,4 0 0 1 41,16 V32 A4,4 0 0 1 37,36 H11 A4,4 0 0 1 7,32 V16 A4,4 0 0 1 11,12 Z M12,15 H36 A2,2 0 0 1 38,17 V31 A2,2 0 0 1 36,33 H12 A2,2 0 0 1 10,31 V17 A2,2 0 0 1 12,15 Z" android:fillType="evenOdd" android:fillColor="#FF2EA8FF" android:fillAlpha="0.85" />
++        <path android:pathData="M13,36 L16.5,36 L13.5,41 L10,41 Z M31.5,36 L35,36 L38,41 L34.5,41 Z" android:fillColor="#FF2EA8FF" android:fillAlpha="0.85" />
++        <path android:pathData="M20.5,19.8 L29.8,24 L20.5,28.2 Z" android:fillColor="#FF2EA8FF" android:fillAlpha="0.85" />
++    </group>
+ </vector>
+diff --git a/application/vlc-android/src/org/videolan/vlc/gui/FeedbackActivity.kt b/application/vlc-android/src/org/videolan/vlc/gui/FeedbackActivity.kt
+index b19a6e1..1e9712f 100644
+--- a/application/vlc-android/src/org/videolan/vlc/gui/FeedbackActivity.kt
++++ b/application/vlc-android/src/org/videolan/vlc/gui/FeedbackActivity.kt
+@@ -156,7 +156,15 @@ class FeedbackActivity : BaseActivity(), DebugLogService.Client.Callback {
+ 
+     override fun onCreate(savedInstanceState: Bundle?) {
+         super.onCreate(savedInstanceState)
++        // Stick Player: feedback / crash report sending is disabled (it would be sent to VideoLAN)
++        FeedbackActivity.job?.cancel()
++        FeedbackActivity.job = null
++        finish()
++        return
++    }
+ 
++    @Suppress("unused")
++    private fun originalOnCreate(savedInstanceState: Bundle?) {
+         client = DebugLogService.Client(this, this)
+         binding = DataBindingUtil.setContentView(this, R.layout.about_feedback_activity)
+         val toolbar = findViewById<MaterialToolbar>(R.id.main_toolbar)
+diff --git a/application/vlc-android/src/org/videolan/vlc/gui/helpers/UiTools.kt b/application/vlc-android/src/org/videolan/vlc/gui/helpers/UiTools.kt
+index 1daf4ba..1eb697c 100644
+--- a/application/vlc-android/src/org/videolan/vlc/gui/helpers/UiTools.kt
++++ b/application/vlc-android/src/org/videolan/vlc/gui/helpers/UiTools.kt
+@@ -535,9 +535,8 @@ object UiTools {
+         v.findViewById<View>(R.id.about_website_container).setOnClickListener {
+             activity.openLinkIfPossible("https://www.videolan.org/vlc/")
+         }
+-        v.findViewById<View>(R.id.about_report_container).setOnClickListener {
+-            activity.startActivity(Intent(activity, FeedbackActivity::class.java))
+-        }
++        // Stick Player: no feedback / crash report sending (it would go to VideoLAN's support)
++        v.findViewById<View>(R.id.about_report_container).visibility = View.GONE
+         v.findViewById<View>(R.id.about_sources_container).setOnClickListener {
+             activity.openLinkIfPossible("https://code.videolan.org/videolan/vlc-android")
+         }
+@@ -559,6 +558,8 @@ object UiTools {
+         }
+ 
+         val donationsButton = v.findViewById<CardView>(R.id.donationsButton)
++        // Stick Player: VideoLAN donation entry hidden
++        donationsButton.visibility = View.GONE
+ //        VLCBilling.getInstance(activity.application).addStatusListener {
+ //            manageDonationVisibility(activity,donationsButton)
+ //        }

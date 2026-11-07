@@ -1,0 +1,68 @@
+diff --git a/application/resources/src/main/res/values-ja/strings.xml b/application/resources/src/main/res/values-ja/strings.xml
+index 58ab292..f38e6a7 100644
+--- a/application/resources/src/main/res/values-ja/strings.xml
++++ b/application/resources/src/main/res/values-ja/strings.xml
+@@ -15,6 +15,8 @@
+     <string name="sortby_size_small">ファイルサイズ（小さい順）</string>
+     <string name="sortby_mtime_new">更新日（新しい順）</string>
+     <string name="sortby_mtime_old">更新日（古い順）</string>
++    <string name="skip_playlist_parse_title">プレイリストの解析をしない</string>
++    <string name="skip_playlist_parse_summary">ローカルのプレイリストの再生を速く始めます（再生前は一部の情報が表示されません）</string>
+     <string name="sortby_random">ランダム</string>
+     <string name="sortby_artist_name">アーティスト名</string>
+     <string name="sortby_album_name">アルバム名</string>
+diff --git a/application/resources/src/main/res/values/strings.xml b/application/resources/src/main/res/values/strings.xml
+index f6f4f9d..a04e04e 100644
+--- a/application/resources/src/main/res/values/strings.xml
++++ b/application/resources/src/main/res/values/strings.xml
+@@ -16,6 +16,8 @@
+     <string name="sortby_size_small">File size (smallest first)</string>
+     <string name="sortby_mtime_new">Date modified (newest first)</string>
+     <string name="sortby_mtime_old">Date modified (oldest first)</string>
++    <string name="skip_playlist_parse_title">Skip playlist parsing</string>
++    <string name="skip_playlist_parse_summary">Start local playlists faster (some information is not shown before playback)</string>
+     <string name="sortby_random">Random</string>
+     <string name="sortby_artist_name">Artist name</string>
+     <string name="sortby_album_name">Album name</string>
+diff --git a/application/vlc-android/res/xml/preferences_ui.xml b/application/vlc-android/res/xml/preferences_ui.xml
+index 3a151b0..9b74d55 100644
+--- a/application/vlc-android/res/xml/preferences_ui.xml
++++ b/application/vlc-android/res/xml/preferences_ui.xml
+@@ -100,6 +100,12 @@
+                 android:key="playlist_mode_video"
+                 android:summary="@string/force_play_all_summary"
+                 android:title="@string/force_play_all_title"/>
++        <CheckBoxPreference
++                app:singleLineTitle="false"
++                android:defaultValue="false"
++                android:key="skip_playlist_parse"
++                android:summary="@string/skip_playlist_parse_summary"
++                android:title="@string/skip_playlist_parse_title"/>
+         <CheckBoxPreference
+                 app:singleLineTitle="false"
+                 android:defaultValue="true"
+diff --git a/application/vlc-android/src/org/videolan/vlc/media/PlaylistManager.kt b/application/vlc-android/src/org/videolan/vlc/media/PlaylistManager.kt
+index b65ff7f..1e86b4f 100644
+--- a/application/vlc-android/src/org/videolan/vlc/media/PlaylistManager.kt
++++ b/application/vlc-android/src/org/videolan/vlc/media/PlaylistManager.kt
+@@ -108,6 +108,9 @@ private const val PREVIOUS_LIMIT_DELAY = 5000L
+ private const val PLAYLIST_AUDIO_REPEAT_MODE_KEY = "audio_repeat_mode"
+ private const val PLAYLIST_VIDEO_REPEAT_MODE_KEY = "video_repeat_mode"
+ 
++/** Custom addition: key of the "Skip playlist parsing" setting */
++const val KEY_SKIP_PLAYLIST_PARSE = "skip_playlist_parse"
++
+ class PlaylistManager(val service: PlaybackService) : MediaWrapperList.EventListener, IMedia.EventListener, CoroutineScope {
+     private var endReachedFor: String? = null
+     override val coroutineContext = Dispatchers.Main.immediate + SupervisorJob()
+@@ -960,7 +963,9 @@ class PlaylistManager(val service: PlaybackService) : MediaWrapperList.EventList
+      * @return the index of the media was expanded, and -1 if no media was expanded
+      */
+     @MainThread
+-    private suspend fun expand(updateHistory: Boolean, skipNextParsing:Boolean = false): Int {
++    private suspend fun expand(updateHistory: Boolean, skipNextParsingFlag:Boolean = false): Int {
++        // Custom addition: "Skip playlist parsing" setting (Interface > Video), no per-entry parse
++        val skipNextParsing = skipNextParsingFlag || settings.getBoolean(KEY_SKIP_PLAYLIST_PARSE, false)
+         entryUrl = null
+         if (BuildConfig.BETA) Log.d(TAG, "expand with values: ", Exception("Call stack"))
+         val index = currentIndex

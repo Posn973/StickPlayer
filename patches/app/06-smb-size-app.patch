@@ -1,0 +1,50 @@
+diff --git a/application/vlc-android/src/org/videolan/vlc/providers/BrowserProvider.kt b/application/vlc-android/src/org/videolan/vlc/providers/BrowserProvider.kt
+index 812f6af..1316840 100644
+--- a/application/vlc-android/src/org/videolan/vlc/providers/BrowserProvider.kt
++++ b/application/vlc-android/src/org/videolan/vlc/providers/BrowserProvider.kt
+@@ -88,6 +88,8 @@ const val TAG = "VLC/BrowserProvider"
+ /** Random order (custom addition) */
+ const val SORT_RANDOM = 100
+ private const val RANDOM_SEED_KEY = "browser_random_sort_seed"
++/** Prefix written by the patched smb2/dsm modules in the EncodedBy meta */
++private const val SIZE_META_PREFIX = "vlcsize:"
+ 
+ abstract class BrowserProvider(val context: Context, val dataset: LiveDataset<MediaLibraryItem>, val url: String?, var sort:Int, var desc:Boolean) : CoroutineScope, HeaderProvider() {
+ 
+@@ -228,8 +230,11 @@ abstract class BrowserProvider(val context: Context, val dataset: LiveDataset<Me
+         val sizes = java.util.IdentityHashMap<MediaLibraryItem, Long>(files.size)
+         for (item in files) {
+             val mw = item as? MediaWrapper
+-            sizes[item] = if (mw == null || mw.type == MediaWrapper.TYPE_DIR || mw.uri?.scheme != "file") 0L
+-            else mw.uri?.path?.let { File(it).length() } ?: 0L
++            sizes[item] = when {
++                mw == null || mw.type == MediaWrapper.TYPE_DIR -> 0L
++                mw.uri?.scheme == "file" -> mw.uri?.path?.let { File(it).length() } ?: 0L
++                else -> remoteSizes[mw.uri?.toString()] ?: 0L // SMB: size sent by the patched libvlc
++            }
+         }
+         val byName = getFilenameAscComp(files.determineMaxNbOfDigits())
+         val isDir = { item: MediaLibraryItem -> (item as? MediaWrapper)?.type == MediaWrapper.TYPE_DIR }
+@@ -248,6 +253,9 @@ abstract class BrowserProvider(val context: Context, val dataset: LiveDataset<Me
+         })
+     }
+ 
++    /** File sizes of network (SMB) files, keyed by uri */
++    private val remoteSizes = java.util.concurrent.ConcurrentHashMap<String, Long>()
++
+     /** Called only when the user explicitly picks "Random" in the sort menu */
+     fun newRandomSeed() {
+         Settings.getInstance(context).putSingle(RANDOM_SEED_KEY, System.nanoTime())
+@@ -443,6 +451,12 @@ abstract class BrowserProvider(val context: Context, val dataset: LiveDataset<Me
+             Log.e(TAG, "Unable to generate the media wrapper. It usually happen when the IMedia fields have some encoding issues", e)
+             return null
+         }
++        try {
++            media.getMeta(IMedia.Meta.EncodedBy, true)?.takeIf { it.startsWith(SIZE_META_PREFIX) }
++                ?.removePrefix(SIZE_META_PREFIX)?.toLongOrNull()
++                ?.let { size -> mw.uri?.toString()?.let { remoteSizes[it] = size } }
++        } catch (e: Exception) {
++        }
+         media.release()
+         if (!mw.isMedia()) {
+             if (!showOnlyMultimedia || mw.isBrowserMedia()) return mw

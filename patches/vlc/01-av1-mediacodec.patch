@@ -1,0 +1,10 @@
+--- a/modules/codec/omxil/mediacodec.c	2026-11-03 13:11:55.061075661 +0900
++++ b/modules/codec/omxil/mediacodec.c	2026-11-03 13:11:55.063264150 +0900
+@@ -630,6 +630,7 @@
+         case VLC_CODEC_VC1:  mime = "video/wvc1"; break;
+         case VLC_CODEC_VP8:  mime = "video/x-vnd.on2.vp8"; break;
+         case VLC_CODEC_VP9:  mime = "video/x-vnd.on2.vp9"; break;
++        case VLC_CODEC_AV1:  mime = "video/av01"; break;
+         }
+     }
+     else

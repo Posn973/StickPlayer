@@ -1,0 +1,49 @@
+diff --git a/application/television/src/main/java/org/videolan/television/ui/browser/BaseBrowserTvFragment.kt b/application/television/src/main/java/org/videolan/television/ui/browser/BaseBrowserTvFragment.kt
+index 25052c5..aa367d6 100644
+--- a/application/television/src/main/java/org/videolan/television/ui/browser/BaseBrowserTvFragment.kt
++++ b/application/television/src/main/java/org/videolan/television/ui/browser/BaseBrowserTvFragment.kt
+@@ -83,7 +83,7 @@ abstract class BaseBrowserTvFragment<T> : Fragment(), BrowserFragmentInterface,
+     private var recyclerSectionItemGridDecoration: RecyclerSectionItemGridDecoration? = null
+     lateinit var binding: SongBrowserBinding
+     lateinit var viewModel: TvBrowserModel<T>
+-    /** Set when the user picks "Random": focus the first item instead of following the moved one */
++    /** Set when the user picks a sort in the menu: focus the first item instead of following the moved one */
+     var focusTopOnNextUpdate = false
+     private var spacing: Int = 0
+     abstract var adapter: TvItemAdapter
+@@ -372,7 +372,6 @@ abstract class BaseBrowserTvFragment<T> : Fragment(), BrowserFragmentInterface,
+                 return true
+             }
+             R.id.ml_menu_sortby_random -> {
+-                focusTopOnNextUpdate = true
+                 sortBy(SORT_RANDOM)
+                 return true
+             }
+@@ -384,7 +383,11 @@ abstract class BaseBrowserTvFragment<T> : Fragment(), BrowserFragmentInterface,
+         }
+     }
+ 
+-    private fun sortBy(sort: Int) = (viewModel as SortableModel).sort(sort)
++    private fun sortBy(sort: Int) {
++        // Any sort picked from the menu: redraw the whole list at once and focus the first item
++        focusTopOnNextUpdate = true
++        (viewModel as SortableModel).sort(sort)
++    }
+ 
+     override fun onHeaderSelected(header: String) {
+         hideHeaderSelectionScreen()
+diff --git a/application/television/src/main/java/org/videolan/television/ui/browser/FileBrowserTvFragment.kt b/application/television/src/main/java/org/videolan/television/ui/browser/FileBrowserTvFragment.kt
+index 5e0a974..c0ed7fd 100644
+--- a/application/television/src/main/java/org/videolan/television/ui/browser/FileBrowserTvFragment.kt
++++ b/application/television/src/main/java/org/videolan/television/ui/browser/FileBrowserTvFragment.kt
+@@ -135,8 +135,8 @@ class FileBrowserTvFragment : BaseBrowserTvFragment<MediaLibraryItem>(), PathAda
+             val randomReshuffle = focusTopOnNextUpdate
+             if (randomReshuffle) {
+                 focusTopOnNextUpdate = false
+-                // Random sort: no diff (too slow with thousands of files) and focus the first item
+-                // only after the new order is actually displayed.
++                // Sort picked from the menu: no diff (too slow with thousands of files) and focus
++                // the first item only after the new order is actually displayed.
+                 @Suppress("UNCHECKED_CAST")
+                 val newList = items as List<MediaWrapper>
+                 (adapter as FileTvItemAdapter).updateFull(newList) {

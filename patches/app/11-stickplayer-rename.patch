@@ -1,0 +1,907 @@
+diff --git a/application/app/build.gradle b/application/app/build.gradle
+index 19c753c..6bad534 100644
+--- a/application/app/build.gradle
++++ b/application/app/build.gradle
+@@ -152,7 +152,7 @@ android {
+             }
+ 
+             output.versionCodeOverride = 10000000 + defaultConfig.versionCode + versionCode
+-            def outputName = "VLC-Android-"
++            def outputName = "StickPlayer-"
+             outputName += variant.versionName.replace(" ", "-")
+             if (variant.buildType.name == "debug") outputName += "-debug"
+             outputName += "-" + abiName + ".apk"
+diff --git a/application/resources/src/main/res/values-am/strings.xml b/application/resources/src/main/res/values-am/strings.xml
+index f020847..e946f5b 100644
+--- a/application/resources/src/main/res/values-am/strings.xml
++++ b/application/resources/src/main/res/values-am/strings.xml
+@@ -156,7 +156,7 @@
+     <string name="hold_to_stop">ተጭነው ይያዙ ለ ማስቆም</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">ቪኤልሲ ለ አንድሮይድ</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">እትም</string>
+     <string name="about">ስለ</string>
+     <string name="vlc_authors">እና የ ቪኤልሲ ደራሲዎች</string>
+diff --git a/application/resources/src/main/res/values-ar/strings.xml b/application/resources/src/main/res/values-ar/strings.xml
+index 16942ba..dc37d79 100644
+--- a/application/resources/src/main/res/values-ar/strings.xml
++++ b/application/resources/src/main/res/values-ar/strings.xml
+@@ -302,7 +302,7 @@
+     <string name="hold_to_stop">أبقِ للتوقيف</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full"> VLC للأندرويد</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">التّنقيح</string>
+     <string name="about">حول</string>
+     <string name="about_vlc_text">إن VLC لأجهزة أندرويد هو نقل عن VLC للحاسوب، وهو المُشغِّل الوسائط الذائع الصيت ومفتوح المصدر. إن هذا الإصدار لأندرويد يستطيع قراءة كل ملفات الوسائط وكذلك التدفقات عبر الشبكات.</string>
+diff --git a/application/resources/src/main/res/values-ast/strings.xml b/application/resources/src/main/res/values-ast/strings.xml
+index e994cf9..de6563a 100644
+--- a/application/resources/src/main/res/values-ast/strings.xml
++++ b/application/resources/src/main/res/values-ast/strings.xml
+@@ -105,7 +105,7 @@
+     <string name="subtitles">Sotítulos</string>
+     <string name="lock">Bloquiar</string>
+     <!-- About -->
+-    <string name="app_name_full">VLC p\'Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Revisión</string>
+     <string name="vlc_authors">y los autores de VLC.</string>
+     <string name="feedback_forum">Foru de comentarios</string>
+diff --git a/application/resources/src/main/res/values-be/strings.xml b/application/resources/src/main/res/values-be/strings.xml
+index 2ed91b0..46d9824 100644
+--- a/application/resources/src/main/res/values-be/strings.xml
++++ b/application/resources/src/main/res/values-be/strings.xml
+@@ -324,7 +324,7 @@
+     <string name="hold_to_stop">Утрымлівайце, каб спыніць</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC для Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Рэвізія</string>
+     <string name="about">Аб праграме</string>
+     <string name="about_vlc_text">VLC для Android™ - порт медыяплеэра VLC (папулярнага прайгравальніка з адкрытым зыходным кодам). Версія для Android™ можа чытаць усе файлы і сеткавыя патокі.</string>
+diff --git a/application/resources/src/main/res/values-br/strings.xml b/application/resources/src/main/res/values-br/strings.xml
+index f41e7f0..ee9a393 100644
+--- a/application/resources/src/main/res/values-br/strings.xml
++++ b/application/resources/src/main/res/values-br/strings.xml
+@@ -291,7 +291,7 @@
+     <string name="hold_to_stop">Pouezit evit paouez</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC evit Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Adwel</string>
+     <string name="about">Diwar-benn</string>
+     <string name="about_vlc_text">VLC evit Android™ zo ur porzh eus al lenner mediaoù VLC, al lenner mediaoù digor brudet. Ar stumm AndroidTM a c\'hell lenn an holl restroù hag ar froudoù rouedad.</string>
+diff --git a/application/resources/src/main/res/values-ca/strings.xml b/application/resources/src/main/res/values-ca/strings.xml
+index 97aed04..542ad1d 100644
+--- a/application/resources/src/main/res/values-ca/strings.xml
++++ b/application/resources/src/main/res/values-ca/strings.xml
+@@ -315,7 +315,7 @@
+     <string name="hold_to_stop">Mantingueu premut per aturar</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC per a l\'Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Revisió</string>
+     <string name="about">En quant a</string>
+     <string name="about_vlc_text">VLC per a l\'Android™ és una versió portada del reproductor multimèdia VLC, el popular reproductor de codi obert. La versió per l\'Android™ permet llegir tota mena de fitxers i fluxos de xarxa.</string>
+diff --git a/application/resources/src/main/res/values-co/strings.xml b/application/resources/src/main/res/values-co/strings.xml
+index 90eceeb..28d63e5 100644
+--- a/application/resources/src/main/res/values-co/strings.xml
++++ b/application/resources/src/main/res/values-co/strings.xml
+@@ -308,7 +308,7 @@
+     <string name="hold_to_stop">Mantene per piantà</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC per Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Revisione</string>
+     <string name="about">Apprupositu</string>
+     <string name="about_vlc_text">VLC per Android™ hè una purtera di VLC media player, u lettore medià pupulare à fonte aperta. A versione Android™ pò leghje tutti i schedarii è i flussi di a reta.</string>
+diff --git a/application/resources/src/main/res/values-cs/strings.xml b/application/resources/src/main/res/values-cs/strings.xml
+index c3d7bff..7d2f8fc 100644
+--- a/application/resources/src/main/res/values-cs/strings.xml
++++ b/application/resources/src/main/res/values-cs/strings.xml
+@@ -338,7 +338,7 @@
+     <string name="hold_to_stop">Dlouze stiskněte pro zastavení přehrávání</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC pro Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Revize</string>
+     <string name="about">O aplikaci</string>
+     <string name="about_vlc_text">VLC pro Android™ je port přehrávače médií VLC, oblíbeného přehrávače médií s otevřeným zdrojovým kódem. Verze pro Android™ dokáže číst všechny soubory a síťové streamy. </string>
+diff --git a/application/resources/src/main/res/values-cy/strings.xml b/application/resources/src/main/res/values-cy/strings.xml
+index 30d4430..133ea0b 100644
+--- a/application/resources/src/main/res/values-cy/strings.xml
++++ b/application/resources/src/main/res/values-cy/strings.xml
+@@ -218,7 +218,7 @@
+     <string name="hold_to_stop">Dal lawr i stopio</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC ar gyfer Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Adolygiad</string>
+     <string name="about">Ynghylch</string>
+     <string name="vlc_authors">ac Awduron VLC.</string>
+diff --git a/application/resources/src/main/res/values-da/strings.xml b/application/resources/src/main/res/values-da/strings.xml
+index e25ecbb..47e995a 100644
+--- a/application/resources/src/main/res/values-da/strings.xml
++++ b/application/resources/src/main/res/values-da/strings.xml
+@@ -316,7 +316,7 @@
+     <string name="hold_to_stop">Hold nede for stop</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC til Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Revision</string>
+     <string name="about">Om</string>
+     <string name="about_vlc_text">VLC til Android™ er afledt af medieafspilleren VLC, den populære open source-medieafspiller. Versionen til Android™ kan læse alle filer og netværksstreams.</string>
+diff --git a/application/resources/src/main/res/values-de/strings.xml b/application/resources/src/main/res/values-de/strings.xml
+index c395a9e..2311668 100644
+--- a/application/resources/src/main/res/values-de/strings.xml
++++ b/application/resources/src/main/res/values-de/strings.xml
+@@ -316,7 +316,7 @@
+     <string name="hold_to_stop">Zum Anhalten gedrückt halten</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC für Android™</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Revision</string>
+     <string name="about">Über</string>
+     <string name="about_vlc_text">VLC für Android™ ist eine Portierung des VLC media players, dem beliebten quelloffenen Mediaplayer. Die Android™-Version kann alle Dateien und Netzwerk-Streams lesen.</string>
+diff --git a/application/resources/src/main/res/values-el/strings.xml b/application/resources/src/main/res/values-el/strings.xml
+index 709a958..83ff64c 100644
+--- a/application/resources/src/main/res/values-el/strings.xml
++++ b/application/resources/src/main/res/values-el/strings.xml
+@@ -308,7 +308,7 @@
+     <string name="hold_to_stop">Παρατεταμένο πάτημα για σταμάτημα</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC για Android™</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Αναθεώρηση</string>
+     <string name="about">Σχετικά</string>
+     <string name="about_vlc_text">Το VLC για Android™ είναι ένα port του προγράμματος αναπαραγωγής πολυμέσων VLC, του δημοφιλούς προγράμματος αναπαραγωγής πολυμέσων ανοιχτού κώδικα. Η έκδοση Android™ μπορεί να διαβάσει όλα τα αρχεία και τις  μεταδόσεις δικτύου.</string>
+diff --git a/application/resources/src/main/res/values-en-rGB/strings.xml b/application/resources/src/main/res/values-en-rGB/strings.xml
+index d377194..0b81e4e 100644
+--- a/application/resources/src/main/res/values-en-rGB/strings.xml
++++ b/application/resources/src/main/res/values-en-rGB/strings.xml
+@@ -315,7 +315,7 @@
+     <string name="hold_to_stop">Hold to stop</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC for Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Revision</string>
+     <string name="about">About</string>
+     <string name="about_vlc_text">VLC for Android™ is a port of VLC media player, the popular open source media player. The Android™ version can read all files and network streams.</string>
+diff --git a/application/resources/src/main/res/values-es-rMX/strings.xml b/application/resources/src/main/res/values-es-rMX/strings.xml
+index a24b433..5cafbe4 100644
+--- a/application/resources/src/main/res/values-es-rMX/strings.xml
++++ b/application/resources/src/main/res/values-es-rMX/strings.xml
+@@ -257,7 +257,7 @@
+     <string name="hold_to_stop">Mantener para detener</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC para Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Revisión</string>
+     <string name="about">Acerca de</string>
+     <string name="about_vlc_text">VLC para Android™ es un port de VLC reproductor multimedia, el popular reproductor de medios de código abierto. La versión de Android™ puede leer todos los archivos y trasmisiones de red.</string>
+diff --git a/application/resources/src/main/res/values-es/strings.xml b/application/resources/src/main/res/values-es/strings.xml
+index b3a46db..01f2144 100644
+--- a/application/resources/src/main/res/values-es/strings.xml
++++ b/application/resources/src/main/res/values-es/strings.xml
+@@ -215,7 +215,7 @@
+     <string name="hold_to_stop">Mantener para parar</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC para Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Revisión</string>
+     <string name="about">Acerca de</string>
+     <string name="vlc_authors">y autores VLC.</string>
+diff --git a/application/resources/src/main/res/values-et/strings.xml b/application/resources/src/main/res/values-et/strings.xml
+index 27d9d4f..fc3578b 100644
+--- a/application/resources/src/main/res/values-et/strings.xml
++++ b/application/resources/src/main/res/values-et/strings.xml
+@@ -316,7 +316,7 @@
+     <string name="hold_to_stop">Peatamiseks hoia</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC Androidile</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Revisjon</string>
+     <string name="about">Rakenduse teave</string>
+     <string name="about_vlc_text">VLC Androidile™ on avatud lähtekoodiga populaarse VLC meediaesitaja üks arendusi. Androidi™ versioon suudab avada enamikke meediafaile ja voogedastusvorminguid.</string>
+diff --git a/application/resources/src/main/res/values-eu/strings.xml b/application/resources/src/main/res/values-eu/strings.xml
+index 5f43d43..6b370c8 100644
+--- a/application/resources/src/main/res/values-eu/strings.xml
++++ b/application/resources/src/main/res/values-eu/strings.xml
+@@ -294,7 +294,7 @@
+     <string name="hold_to_stop">Mantendu gelditzeko</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">Androiderako VLC</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Berrikuspena</string>
+     <string name="about">Honi buruz</string>
+     <string name="about_vlc_text">VLC Android™ VLC kode irekiko multimedia erreproduzitzaile ezagunaren ataka da, . Android™ bertsioak fitxategi eta sareko korronte guztiak irakur ditzake.</string>
+diff --git a/application/resources/src/main/res/values-fa/strings.xml b/application/resources/src/main/res/values-fa/strings.xml
+index b1ea1c6..04105da 100644
+--- a/application/resources/src/main/res/values-fa/strings.xml
++++ b/application/resources/src/main/res/values-fa/strings.xml
+@@ -253,7 +253,7 @@
+     <string name="hold_to_stop">نگه دارید تا متوقف شود</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">وی‌ال‌سی برای اندروید</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">تاریخ به روز رسانی</string>
+     <string name="about">درباره</string>
+     <string name="about_vlc_text">وی‌ال‌سی برای اندروید™ یک ترابری از پخش‌کنندهٔ رسانه وی‌ال‌سی است، پخش‌کنندهٔ رسانه متن‌باز و محبوب.  نگارش اندروید™ می‌تواند همهٔ پرونده‌ها و جریان‌های شبکه را بخواند.</string>
+diff --git a/application/resources/src/main/res/values-fi/strings.xml b/application/resources/src/main/res/values-fi/strings.xml
+index 3833d0c..0301345 100644
+--- a/application/resources/src/main/res/values-fi/strings.xml
++++ b/application/resources/src/main/res/values-fi/strings.xml
+@@ -321,7 +321,7 @@ Kun olet poistanut sen käytöstä, et ehkä voi jatkaa toistoa:
+     <string name="hold_to_stop">Pidä pysäyttääksesi</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC Android™</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Revisio</string>
+     <string name="about">Tietoja</string>
+     <string name="about_vlc_text">VLC Android™ on suositun avoimen lähdekoodin mediasoitin puhelimelle. Android™ versio osaa käyttää kaikkia tarvittavia tiedostoja ja suoratoistoa verkossa.</string>
+diff --git a/application/resources/src/main/res/values-fr/strings.xml b/application/resources/src/main/res/values-fr/strings.xml
+index 5dc6e67..9c58924 100644
+--- a/application/resources/src/main/res/values-fr/strings.xml
++++ b/application/resources/src/main/res/values-fr/strings.xml
+@@ -327,7 +327,7 @@
+     <string name="hold_to_stop">Maintenir pour arrêter</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC pour Android™</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Révision</string>
+     <string name="about">À propos</string>
+     <string name="about_vlc_text">VLC pour Android™ est un portage du lecteur multimédia VLC, le célèbre lecteur multimédia open source. La version Android™ peut lire tous les fichiers et les flux réseaux.</string>
+diff --git a/application/resources/src/main/res/values-ga/strings.xml b/application/resources/src/main/res/values-ga/strings.xml
+index 4d9a74f..4eb8b49 100644
+--- a/application/resources/src/main/res/values-ga/strings.xml
++++ b/application/resources/src/main/res/values-ga/strings.xml
+@@ -231,7 +231,7 @@
+     <string name="hold_to_stop">Coinnigh greim air chun stad</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC i gcomhair Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Leasú</string>
+     <string name="about">Maidir le</string>
+     <string name="authors">Údair</string>
+diff --git a/application/resources/src/main/res/values-gl/strings.xml b/application/resources/src/main/res/values-gl/strings.xml
+index ed328ce..b90f523 100644
+--- a/application/resources/src/main/res/values-gl/strings.xml
++++ b/application/resources/src/main/res/values-gl/strings.xml
+@@ -243,7 +243,7 @@
+     <string name="hold_to_stop">Manter para deter</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC para Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Revisión</string>
+     <string name="about">Sobre</string>
+     <string name="authors">Autores</string>
+diff --git a/application/resources/src/main/res/values-he/strings.xml b/application/resources/src/main/res/values-he/strings.xml
+index 8c01aab..e639394 100644
+--- a/application/resources/src/main/res/values-he/strings.xml
++++ b/application/resources/src/main/res/values-he/strings.xml
+@@ -331,7 +331,7 @@
+     <string name="hold_to_stop">להחזיק לעצירה</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC ל־Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">מהדורה</string>
+     <string name="about">על אודות</string>
+     <string name="about_vlc_text">VLC ל־Android™‎ הוא הסבה של נגן המדיה הפופולרית בקוד פתוחVLC. הגירסה ל־Android™‎ יכולה לקרוא את כל הקבצים ותזרימי הרשת.</string>
+diff --git a/application/resources/src/main/res/values-hi/strings.xml b/application/resources/src/main/res/values-hi/strings.xml
+index 78abf19..908233f 100644
+--- a/application/resources/src/main/res/values-hi/strings.xml
++++ b/application/resources/src/main/res/values-hi/strings.xml
+@@ -244,7 +244,7 @@
+     <string name="hold_to_stop">रोकने के लिए पकड़ें रखें</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">ऐंडरॉयड के लिए VLC</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">संशोधन</string>
+     <string name="about">परिचय</string>
+     <string name="authors">निर्मातागण</string>
+diff --git a/application/resources/src/main/res/values-hr/strings.xml b/application/resources/src/main/res/values-hr/strings.xml
+index dc1fd71..20c7594 100644
+--- a/application/resources/src/main/res/values-hr/strings.xml
++++ b/application/resources/src/main/res/values-hr/strings.xml
+@@ -212,7 +212,7 @@
+     <string name="hold_to_stop">Drži za zasutavljanje</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC za Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Izdanje</string>
+     <string name="about">O aplikaciji</string>
+     <string name="vlc_authors">Autori VLC-a.</string>
+diff --git a/application/resources/src/main/res/values-hu/strings.xml b/application/resources/src/main/res/values-hu/strings.xml
+index 9ea5786..94f249d 100644
+--- a/application/resources/src/main/res/values-hu/strings.xml
++++ b/application/resources/src/main/res/values-hu/strings.xml
+@@ -316,7 +316,7 @@
+     <string name="hold_to_stop">Tartsa a leállításhoz</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC for Android™</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Revízió</string>
+     <string name="about">Névjegy</string>
+     <string name="about_vlc_text">A VLC for Android™  a népszerű nyílt forráskódú médialejátszó, a VLC Media Player portja. Az androidos verzió minden fájlt és hálózati adatfolyamot képes olvasni.</string>
+diff --git a/application/resources/src/main/res/values-id/strings.xml b/application/resources/src/main/res/values-id/strings.xml
+index bdee7f0..d8cb1b6 100644
+--- a/application/resources/src/main/res/values-id/strings.xml
++++ b/application/resources/src/main/res/values-id/strings.xml
+@@ -244,7 +244,7 @@
+     <string name="hold_to_stop">Tahan untuk berhenti</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC untuk Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Revisi</string>
+     <string name="about">Tentang</string>
+     <string name="about_vlc_text">VLC untuk Android™ merupakan bagian dari VLC media player, pemutar media terbuka yang populer. Versi Android™ dapat membuka semua jenis file dan salurang media langsung.</string>
+diff --git a/application/resources/src/main/res/values-in/strings.xml b/application/resources/src/main/res/values-in/strings.xml
+index bf42de5..9a10d88 100644
+--- a/application/resources/src/main/res/values-in/strings.xml
++++ b/application/resources/src/main/res/values-in/strings.xml
+@@ -241,7 +241,7 @@
+     <string name="hold_to_stop">Tahan untuk berhenti</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC untuk Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Revisi</string>
+     <string name="about">Tentang</string>
+     <string name="about_vlc_text">VLC untuk Android™ merupakan bagian dari VLC media player, pemutar media terbuka yang populer. Versi Android™ dapat membuka semua jenis file dan salurang media langsung.</string>
+diff --git a/application/resources/src/main/res/values-is/strings.xml b/application/resources/src/main/res/values-is/strings.xml
+index 7a31e9c..23c92d8 100644
+--- a/application/resources/src/main/res/values-is/strings.xml
++++ b/application/resources/src/main/res/values-is/strings.xml
+@@ -246,7 +246,7 @@
+     <string name="hold_to_stop">Halda til að stöðva</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC fyrir Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Útgáfuauðkenni</string>
+     <string name="about">Um</string>
+     <string name="about_vlc_text">VLC fyrir Android™ er yfirfærð útgáfa af VLC margmiðlunarspilaranum, eins vinsælasta opna/frjálsa margmiðlunarspilarans. Android™ útgáfan getur lesið flestar skrár og netstreymi.</string>
+diff --git a/application/resources/src/main/res/values-it/strings.xml b/application/resources/src/main/res/values-it/strings.xml
+index 2c16fb6..e0d964e 100644
+--- a/application/resources/src/main/res/values-it/strings.xml
++++ b/application/resources/src/main/res/values-it/strings.xml
+@@ -327,7 +327,7 @@
+     <string name="hold_to_stop">Trattieni per fermare</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC per Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Revisione</string>
+     <string name="about">Informazioni</string>
+     <string name="about_vlc_text">VLC per Android™ è un port del lettore multimediale VLC, il popolare lettore multimediale open source. La versione per Android™ può leggere la maggior parte dei file e dei flussi di rete.</string>
+diff --git a/application/resources/src/main/res/values-ja/strings.xml b/application/resources/src/main/res/values-ja/strings.xml
+index f38e6a7..103bd5d 100644
+--- a/application/resources/src/main/res/values-ja/strings.xml
++++ b/application/resources/src/main/res/values-ja/strings.xml
+@@ -314,7 +314,7 @@
+     <string name="hold_to_stop">停止を保持</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC for Android™</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">リビジョン</string>
+     <string name="about">VLCについて</string>
+     <string name="about_vlc_text">VLC for Android™ はポピュラーなオープンソースのメディアプレイヤーであるVLCメディアプレイヤーの移植版です。Android™ 版は多くのファイルとネットワークストリームを読み込むことが可能です。</string>
+diff --git a/application/resources/src/main/res/values-ka/strings.xml b/application/resources/src/main/res/values-ka/strings.xml
+index 9e11412..6c7dd11 100644
+--- a/application/resources/src/main/res/values-ka/strings.xml
++++ b/application/resources/src/main/res/values-ka/strings.xml
+@@ -315,7 +315,7 @@
+     <string name="hold_to_stop">დააჭირეთ შესაწყვეტად</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">გამოცემა</string>
+     <string name="about">შესახებ</string>
+     <string name="about_vlc_text">VLC Android™ არის ამ სისტემისთვის მორგებული ცნობილი და ღია წყაროს მქონე მედიაფაილების დამკვრელი VLC media player. მოცემულ Android™-ვერსიას შეუძლია ყველა სახის ფაილისა და ქსელური ნაკადის გაშვება.</string>
+diff --git a/application/resources/src/main/res/values-kab/strings.xml b/application/resources/src/main/res/values-kab/strings.xml
+index 328345c..7840287 100644
+--- a/application/resources/src/main/res/values-kab/strings.xml
++++ b/application/resources/src/main/res/values-kab/strings.xml
+@@ -207,7 +207,7 @@
+     <string name="previous_next_song">Tizlit ɣer sdat/ɣer deffir</string>
+     <string name="show_playlist">Beqqeḍ tabdart n tɣuri</string>
+     <!-- About -->
+-    <string name="app_name_full">VLC i Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Aceggeṛ</string>
+     <string name="about">Ɣef</string>
+     <!-- Preferences -->
+diff --git a/application/resources/src/main/res/values-ko/strings.xml b/application/resources/src/main/res/values-ko/strings.xml
+index f056105..e2a63b9 100644
+--- a/application/resources/src/main/res/values-ko/strings.xml
++++ b/application/resources/src/main/res/values-ko/strings.xml
+@@ -303,7 +303,7 @@
+     <string name="hold_to_stop">멈추려면 길게 누르기</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">Android용 VLC</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">리비전</string>
+     <string name="about">정보</string>
+     <string name="about_vlc_text">Android™용 VLC는 인기 있는 오픈 소스 미디어 재생기인 VLC 미디어 재생기의 이식된 버전입니다. Android™ 버전은 모든 파일과 네트워크 스트림을 읽을 수 있습니다.</string>
+diff --git a/application/resources/src/main/res/values-ku/strings.xml b/application/resources/src/main/res/values-ku/strings.xml
+index 0087c71..cab26c8 100644
+--- a/application/resources/src/main/res/values-ku/strings.xml
++++ b/application/resources/src/main/res/values-ku/strings.xml
+@@ -201,7 +201,7 @@
+     <string name="hold_to_stop">Ji rawestandinê, pêlîkirî bihêle</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC ji bo Androidê</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Revizyon</string>
+     <string name="about">Derbar</string>
+     <string name="vlc_authors">û Pêşvebirên VLC\'ê.</string>
+diff --git a/application/resources/src/main/res/values-lo/strings.xml b/application/resources/src/main/res/values-lo/strings.xml
+index ea54854..200c893 100644
+--- a/application/resources/src/main/res/values-lo/strings.xml
++++ b/application/resources/src/main/res/values-lo/strings.xml
+@@ -153,7 +153,7 @@
+     <string name="hold_to_stop">ກົດຄ້າງໄວ້ເພື່ອຢຸດ</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC ສຳລັບ Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">ປັບປຸງໃໝ່</string>
+     <string name="about">ກ່ຽວກັບ</string>
+     <!-- Preferences -->
+diff --git a/application/resources/src/main/res/values-lt/strings.xml b/application/resources/src/main/res/values-lt/strings.xml
+index 23866ad..ff10ec1 100644
+--- a/application/resources/src/main/res/values-lt/strings.xml
++++ b/application/resources/src/main/res/values-lt/strings.xml
+@@ -293,7 +293,7 @@
+     <string name="hold_to_stop">Norėdami sustabdyti, palaikykite nuspaudę</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC, skirta „Android“ sistemai</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Revizija</string>
+     <string name="about">Apie</string>
+     <string name="about_vlc_text">VLC, skirta „Android“™ sistemai, yra VLC medijos leistuvės (populiarios atvirojo kodo medijos leistuvės) prievadas. „Android“™ versija gali skaityti visas rinkmenas ir tinklo srautus.</string>
+diff --git a/application/resources/src/main/res/values-lv/strings.xml b/application/resources/src/main/res/values-lv/strings.xml
+index c1260c6..e8806aa 100644
+--- a/application/resources/src/main/res/values-lv/strings.xml
++++ b/application/resources/src/main/res/values-lv/strings.xml
+@@ -190,7 +190,7 @@
+     <string name="hold_to_stop">Turiet lai apturētu</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC priekš Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Revīzija</string>
+     <string name="about">Par</string>
+     <string name="vlc_authors">un VLC autori.</string>
+diff --git a/application/resources/src/main/res/values-ml/strings.xml b/application/resources/src/main/res/values-ml/strings.xml
+index 122208b..e35bfa6 100644
+--- a/application/resources/src/main/res/values-ml/strings.xml
++++ b/application/resources/src/main/res/values-ml/strings.xml
+@@ -238,7 +238,7 @@
+     <string name="hold_to_stop">നിർത്താനായി തൊട്ടുപിടിക്കുക </string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">ആന്‍ഡ്രോയ്ഡിനുള്ള വിഎല്‍സി</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">പരിഷ്‌കരണം</string>
+     <string name="about">കുറിച്ച്‌</string>
+     <string name="about_vlc_text">ആൻഡ്രോയിഡ്™-നുള്ള വിഎൽസി എന്നത് ജനപ്രിയ തുറന്ന കോഡുള്ള മീഡിയ പ്ലെയറായ വിഎൽസി മീഡിയ പ്ലെയറിന്റെ ഒരു പതിപ്പാണ് ആണ്. ആൻഡ്രോയിഡ് ™ പതിപ്പിന് എല്ലാ ഫയലുകളും ശ്രിംഘലയിൽ നിന്നുള്ള ഒഴുക്കുകളും വായിക്കാനാകും.</string>
+diff --git a/application/resources/src/main/res/values-ms/strings.xml b/application/resources/src/main/res/values-ms/strings.xml
+index 82ad0e8..7ce1587 100644
+--- a/application/resources/src/main/res/values-ms/strings.xml
++++ b/application/resources/src/main/res/values-ms/strings.xml
+@@ -285,7 +285,7 @@
+     <string name="hold_to_stop">Tahan untuk henti</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC untuk Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Semakan</string>
+     <string name="about">Perihal</string>
+     <string name="about_vlc_text">VLC untuk Android™ merupakan sebuah port pemain media VLC, pemain media sumber terbuka yang terkenal. Versi Android™ dapat membaca semua fail dan strim rangkaian.</string>
+diff --git a/application/resources/src/main/res/values-nb/strings.xml b/application/resources/src/main/res/values-nb/strings.xml
+index 46ad302..5d49486 100644
+--- a/application/resources/src/main/res/values-nb/strings.xml
++++ b/application/resources/src/main/res/values-nb/strings.xml
+@@ -265,7 +265,7 @@
+     <string name="hold_to_stop">Hold for å stoppe</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC for Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Revisjon</string>
+     <string name="about">Om</string>
+     <string name="about_vlc_text">VLC for Android™ er en port av VLC mediespiller, den populære åpen-kildekodede mediespilleren. Android™-versjonen kan lese alle filer og nettverksstrømmer.</string>
+diff --git a/application/resources/src/main/res/values-ne/strings.xml b/application/resources/src/main/res/values-ne/strings.xml
+index add62fe..84750d3 100644
+--- a/application/resources/src/main/res/values-ne/strings.xml
++++ b/application/resources/src/main/res/values-ne/strings.xml
+@@ -256,7 +256,7 @@
+     <string name="hold_to_stop">रोक्नको लागि थाम्नुहोस्</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">एन्ड्रोइडका लागि भिएलसी</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">संशोधन</string>
+     <string name="about">बारे</string>
+     <string name="authors">निर्माताहरू</string>
+diff --git a/application/resources/src/main/res/values-nl/strings.xml b/application/resources/src/main/res/values-nl/strings.xml
+index ad238a9..020e853 100644
+--- a/application/resources/src/main/res/values-nl/strings.xml
++++ b/application/resources/src/main/res/values-nl/strings.xml
+@@ -306,7 +306,7 @@
+     <string name="hold_to_stop">Inhouden om te stoppen</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC voor Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Revisie</string>
+     <string name="about">Over</string>
+     <string name="about_vlc_text">VLC voor Android™ is een port van VLC media player, de populaire open source mediaspeler. De Android™-versie kan alle bestanden en netwerkstreams lezen.</string>
+diff --git a/application/resources/src/main/res/values-nn/strings.xml b/application/resources/src/main/res/values-nn/strings.xml
+index f1467c8..caab610 100644
+--- a/application/resources/src/main/res/values-nn/strings.xml
++++ b/application/resources/src/main/res/values-nn/strings.xml
+@@ -304,7 +304,7 @@
+     <string name="hold_to_stop">Hald for å stoppe</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC for Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Revisjon</string>
+     <string name="about">Om</string>
+     <string name="is_compiled_by">Sett saman av</string>
+diff --git a/application/resources/src/main/res/values-pl/strings.xml b/application/resources/src/main/res/values-pl/strings.xml
+index e9caa1d..00bf928 100644
+--- a/application/resources/src/main/res/values-pl/strings.xml
++++ b/application/resources/src/main/res/values-pl/strings.xml
+@@ -235,7 +235,7 @@
+     <string name="hold_to_stop">Przytrzymaj, aby zatrzymać</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC dla Androida™</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Wydanie</string>
+     <string name="about">O VLC</string>
+     <string name="authors">Autorzy</string>
+diff --git a/application/resources/src/main/res/values-pt-rBR/strings.xml b/application/resources/src/main/res/values-pt-rBR/strings.xml
+index 8f5a4ae..a004975 100644
+--- a/application/resources/src/main/res/values-pt-rBR/strings.xml
++++ b/application/resources/src/main/res/values-pt-rBR/strings.xml
+@@ -283,7 +283,7 @@
+     <string name="hold_to_stop">Segure para parar</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC para Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Revisão</string>
+     <string name="about">Sobre</string>
+     <string name="about_vlc_text">O VLC para Android™ é uma versão do reprodutor de mídias VLC, o reprodutor de mídias livre popular. A versão para Android™ pode ler todos os tipos de arquivos e transmissões de rede.</string>
+diff --git a/application/resources/src/main/res/values-pt/strings.xml b/application/resources/src/main/res/values-pt/strings.xml
+index f25912e..6550b4c 100644
+--- a/application/resources/src/main/res/values-pt/strings.xml
++++ b/application/resources/src/main/res/values-pt/strings.xml
+@@ -319,7 +319,7 @@
+     <string name="hold_to_stop">Segure para parar</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC para Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Revisão</string>
+     <string name="about">Sobre</string>
+     <string name="about_vlc_text">VLC para Android™ é uma versão do VLC media player, o reprodutor de multimédia popular de código aberto. A versão para Android™ pode ler a maioria dos ficheiros e transmissões de rede.</string>
+diff --git a/application/resources/src/main/res/values-ro/strings.xml b/application/resources/src/main/res/values-ro/strings.xml
+index 2f7bd17..57d4758 100644
+--- a/application/resources/src/main/res/values-ro/strings.xml
++++ b/application/resources/src/main/res/values-ro/strings.xml
+@@ -327,7 +327,7 @@
+     <string name="hold_to_stop">Apăsați pentru a opri</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC pentru Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Revizie</string>
+     <string name="about">Despre</string>
+     <string name="about_vlc_text">VLC pentru Android™ este o portare a media player-ului VLC, popularul media player de tip open source. Versiunea pentru Android™ poate citi majoritatea fișierelor și fluxurilor de rețea.</string>
+diff --git a/application/resources/src/main/res/values-ru/strings.xml b/application/resources/src/main/res/values-ru/strings.xml
+index 21f7368..aea6808 100644
+--- a/application/resources/src/main/res/values-ru/strings.xml
++++ b/application/resources/src/main/res/values-ru/strings.xml
+@@ -256,7 +256,7 @@
+     <string name="hold_to_stop">Удержание — останов</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC для Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Ревизия</string>
+     <string name="about">О программе</string>
+     <string name="about_vlc_text">VLC для Android™ - порт медиаплеера VLC (популярного плеера с открытым исходным кодом). Версия для Android™ может воспроизводить любые файлы и сетевые потоки.</string>
+diff --git a/application/resources/src/main/res/values-sat/strings.xml b/application/resources/src/main/res/values-sat/strings.xml
+index 5afa9c5..36bf607 100644
+--- a/application/resources/src/main/res/values-sat/strings.xml
++++ b/application/resources/src/main/res/values-sat/strings.xml
+@@ -242,7 +242,7 @@
+     <string name="hold_to_stop">ᱥᱟᱵ ᱠᱟᱛᱮ ᱛᱤᱸᱜᱩ ᱪᱷᱚ</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VlC for Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">ᱫᱚᱦᱲᱟᱭᱮᱱ</string>
+     <string name="about">ᱵᱟᱵᱚᱛ</string>
+     <string name="vlc_authors">ᱟᱨ VLC ᱚᱱᱚᱞᱤᱭᱟᱹᱠᱚ ᱾</string>
+diff --git a/application/resources/src/main/res/values-sc/strings.xml b/application/resources/src/main/res/values-sc/strings.xml
+index c025eae..a484c18 100644
+--- a/application/resources/src/main/res/values-sc/strings.xml
++++ b/application/resources/src/main/res/values-sc/strings.xml
+@@ -315,7 +315,7 @@
+     <string name="hold_to_stop">Mantene incarcadu pro firmare</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC pro Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Revisione</string>
+     <string name="about">Informatziones</string>
+     <string name="about_vlc_text">VLC pro Android™ est una versione mòbile de su leghidore multimediale VLC, su populare leghidore multimediale a mitza aberta. Sa versione pro Android™ podet lèghere totu sos documentos e de sos flussos de retza.</string>
+diff --git a/application/resources/src/main/res/values-sk/strings.xml b/application/resources/src/main/res/values-sk/strings.xml
+index 3843563..d66dbc4 100644
+--- a/application/resources/src/main/res/values-sk/strings.xml
++++ b/application/resources/src/main/res/values-sk/strings.xml
+@@ -338,7 +338,7 @@
+     <string name="hold_to_stop">Podržte pre zastavenie</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC for Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Revízia</string>
+     <string name="about">O aplikácii</string>
+     <string name="about_vlc_text">VLC for Android™ je portom programu VLC media player, populárneho open-source prehrávača médií. Verzia pre systém Android™ dokáže prečítať všetky súbory a sieťové streamy.</string>
+diff --git a/application/resources/src/main/res/values-sl/strings.xml b/application/resources/src/main/res/values-sl/strings.xml
+index e4a6748..a6ed62f 100644
+--- a/application/resources/src/main/res/values-sl/strings.xml
++++ b/application/resources/src/main/res/values-sl/strings.xml
+@@ -330,7 +330,7 @@
+     <string name="hold_to_stop">Zadržite pritisk za zaustavitev</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC za Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Predelava</string>
+     <string name="about">O programu</string>
+     <string name="about_vlc_text">VLC za Android™ je prilagojena različica VLC predvajalnika, priljubljenega odprto-kodnega predvajalnika vsebin. Različica za Android™ zna brati vse vrste datotek in omrežnih pretokov.</string>
+diff --git a/application/resources/src/main/res/values-sq/strings.xml b/application/resources/src/main/res/values-sq/strings.xml
+index 7740580..b68892e 100644
+--- a/application/resources/src/main/res/values-sq/strings.xml
++++ b/application/resources/src/main/res/values-sq/strings.xml
+@@ -182,7 +182,7 @@
+     <string name="hold_to_stop">Mbaj për të ndaluar</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC për Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Rishikim</string>
+     <string name="about">Rreth</string>
+     <string name="vlc_authors">dhe Autoret e VLC.</string>
+diff --git a/application/resources/src/main/res/values-sr/strings.xml b/application/resources/src/main/res/values-sr/strings.xml
+index b7eae8d..2256d4a 100644
+--- a/application/resources/src/main/res/values-sr/strings.xml
++++ b/application/resources/src/main/res/values-sr/strings.xml
+@@ -202,7 +202,7 @@
+     <string name="hold_to_stop">Држите да зауставите</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">ВЛЦ за Андроид</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Ревизија</string>
+     <string name="about">О апликацији</string>
+     <string name="vlc_authors">и аутори VLC-а.</string>
+diff --git a/application/resources/src/main/res/values-sv/strings.xml b/application/resources/src/main/res/values-sv/strings.xml
+index 77ba478..bfdc1bc 100644
+--- a/application/resources/src/main/res/values-sv/strings.xml
++++ b/application/resources/src/main/res/values-sv/strings.xml
+@@ -316,7 +316,7 @@
+     <string name="hold_to_stop">Håll ned för att stoppa</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC for Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Version</string>
+     <string name="about">Om</string>
+     <string name="about_vlc_text">VLC for Android™ är en portering av VLC media player, den populära mediaspelaren med öppen källkod. Android™-versionen kan läsa alla filer och nätverksströmmar.</string>
+diff --git a/application/resources/src/main/res/values-sw/strings.xml b/application/resources/src/main/res/values-sw/strings.xml
+index 60a57d7..2e84745 100644
+--- a/application/resources/src/main/res/values-sw/strings.xml
++++ b/application/resources/src/main/res/values-sw/strings.xml
+@@ -245,7 +245,7 @@
+     <string name="hold_to_stop">Shikilia ili ukatize</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC ya Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Marudio</string>
+     <string name="about">Kuhusu</string>
+     <string name="about_vlc_text">VLC ya Android™ ni nakala ya kichezaji midia cha VLC , kichezaji midia maarufu na programu huria. Nakala ya Android™ inaweza kusoma faili zote na mitiririko yote ya mtandao.</string>
+diff --git a/application/resources/src/main/res/values-ta/strings.xml b/application/resources/src/main/res/values-ta/strings.xml
+index 7159a00..24cbda4 100644
+--- a/application/resources/src/main/res/values-ta/strings.xml
++++ b/application/resources/src/main/res/values-ta/strings.xml
+@@ -189,7 +189,7 @@
+     <string name="hold_to_stop">நிறுத்த அழுத்திப் பிடி</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">ஆண்ட்ராய்டு VLC</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">மறுபதிப்பு</string>
+     <string name="about">பற்றி</string>
+     <string name="vlc_authors">மற்றும் VLC ஆசிரியர்கள்.</string>
+diff --git a/application/resources/src/main/res/values-th/strings.xml b/application/resources/src/main/res/values-th/strings.xml
+index e41b021..0fb2620 100644
+--- a/application/resources/src/main/res/values-th/strings.xml
++++ b/application/resources/src/main/res/values-th/strings.xml
+@@ -191,7 +191,7 @@
+     <string name="hold_to_stop">กดค้างเพื่อหยุด</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC สำหรับ Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">การปรับปรุง</string>
+     <string name="about">เกี่ยวกับ</string>
+     <string name="vlc_authors">และผู้จัดทำ VLC</string>
+diff --git a/application/resources/src/main/res/values-tr/strings.xml b/application/resources/src/main/res/values-tr/strings.xml
+index ea4fa75..73380ba 100644
+--- a/application/resources/src/main/res/values-tr/strings.xml
++++ b/application/resources/src/main/res/values-tr/strings.xml
+@@ -316,7 +316,7 @@
+     <string name="hold_to_stop">Basılı tutarak durdurun</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">Android için VLC</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Değişiklik</string>
+     <string name="about">Hakkında</string>
+     <string name="about_vlc_text">Android™ için VLC, çok kullanılan açık kaynaklı VLC ortam oynatıcının bir parçasıdır. Android™ sürümü tüm dosya ve ağ akışlarını okuyabilir.</string>
+diff --git a/application/resources/src/main/res/values-tt/strings.xml b/application/resources/src/main/res/values-tt/strings.xml
+index e188f97..928230b 100644
+--- a/application/resources/src/main/res/values-tt/strings.xml
++++ b/application/resources/src/main/res/values-tt/strings.xml
+@@ -171,7 +171,7 @@
+     <string name="hold_to_stop">Туктауны җибәрмәгез</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">Android өчен VLC</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Ревизия</string>
+     <string name="about">Кушымта турында</string>
+     <string name="vlc_authors">һәм VLC ясаучылары.</string>
+diff --git a/application/resources/src/main/res/values-uk/strings.xml b/application/resources/src/main/res/values-uk/strings.xml
+index 5804715..594dbd7 100644
+--- a/application/resources/src/main/res/values-uk/strings.xml
++++ b/application/resources/src/main/res/values-uk/strings.xml
+@@ -308,7 +308,7 @@
+     <string name="hold_to_stop">Утримуйте для припинення</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC для Android™</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Збірка</string>
+     <string name="about">Про програму</string>
+     <string name="about_vlc_text">VLC для Android™ ­— це порт медіаплеєра VLC, відомого плеєра з відкритим вихідним кодом. Версія для Android™ може читати усі файли і мережеві потоки.</string>
+diff --git a/application/resources/src/main/res/values-vi/strings.xml b/application/resources/src/main/res/values-vi/strings.xml
+index 41c9ac7..ad8acfa 100644
+--- a/application/resources/src/main/res/values-vi/strings.xml
++++ b/application/resources/src/main/res/values-vi/strings.xml
+@@ -252,7 +252,7 @@
+     <string name="hold_to_stop">Giữ để dừng</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC dành cho Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Duyệt lại</string>
+     <string name="about">Thông tin</string>
+     <string name="about_vlc_text">VLC dành cho Android™ là một phiên bản khác của trình phát đa phương tiện VLC, đây là trình phát đa phương tiện mã nguồn mở phổ biến. Phiên bản Android™ có thể đọc tất cả các tệp và luồng mạng.</string>
+diff --git a/application/resources/src/main/res/values-zh-rCN/strings.xml b/application/resources/src/main/res/values-zh-rCN/strings.xml
+index 0c9a428..1a64759 100644
+--- a/application/resources/src/main/res/values-zh-rCN/strings.xml
++++ b/application/resources/src/main/res/values-zh-rCN/strings.xml
+@@ -305,7 +305,7 @@
+     <string name="hold_to_stop">按住可停止</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC for Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">修订版本</string>
+     <string name="about">关于</string>
+     <string name="about_vlc_text">VLC for Android™ 是广受欢迎的开源媒体播放器 ｢VLC media player｣ 的移植版本。Android™ 版本可以读取几乎所有文件以及网络流。</string>
+diff --git a/application/resources/src/main/res/values-zh-rTW/strings.xml b/application/resources/src/main/res/values-zh-rTW/strings.xml
+index 6515d55..5931646 100644
+--- a/application/resources/src/main/res/values-zh-rTW/strings.xml
++++ b/application/resources/src/main/res/values-zh-rTW/strings.xml
+@@ -305,7 +305,7 @@
+     <string name="hold_to_stop">按住以停止</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC for Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">修訂版</string>
+     <string name="about">關於</string>
+     <string name="about_vlc_text">Android™ 版本的 VLC 是 VLC 媒體播放程式的移植版本，是相當受歡迎的開放原始碼媒體播放程式。Android™ 版本可以讀取所有檔案與網路串流。</string>
+diff --git a/application/resources/src/main/res/values/strings.xml b/application/resources/src/main/res/values/strings.xml
+index a04e04e..22a3ed9 100644
+--- a/application/resources/src/main/res/values/strings.xml
++++ b/application/resources/src/main/res/values/strings.xml
+@@ -5,7 +5,7 @@
+     <!-- Main VLC Interface -->
+     <string name="ok">OK</string>
+     <string name="cancel">Cancel</string>
+-    <string name="app_name" translatable="false">VLC</string>
++    <string name="app_name" translatable="false">Stick Player</string>
+     <string name="other">Other</string>
+     <string name="sortby">Sort by…</string>
+     <string name="sortby_name">Name</string>
+@@ -332,7 +332,7 @@
+     <string name="hold_to_stop">Hold to stop</string>
+ 
+     <!-- About -->
+-    <string name="app_name_full">VLC for Android</string>
++    <string name="app_name_full">Stick Player</string>
+     <string name="revision">Revision</string>
+     <string name="about">About</string>
+     <string name="about_vlc_text">VLC for Android™ is a port of VLC media player, the popular open source media player. The Android™ version can read all files and network streams.</string>
+diff --git a/application/vlc-android/AndroidManifest.xml b/application/vlc-android/AndroidManifest.xml
+index 622f418..4cd2823 100644
+--- a/application/vlc-android/AndroidManifest.xml
++++ b/application/vlc-android/AndroidManifest.xml
+@@ -937,7 +937,7 @@
+                 <data android:pathPattern=".*\\..*\\..*\\.xspf" />
+                 <data android:pathPattern=".*\\..*\\..*\\.XSPF" />
+             </intent-filter>
+-            <intent-filter android:label="Play with VLC">
++            <intent-filter android:label="Play with Stick Player">
+                 <action android:name="android.intent.action.SEND"/>
+ 
+                 <category android:name="android.intent.category.DEFAULT"/>
+diff --git a/build.gradle b/build.gradle
+index f0add6a..363c437 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -60,7 +60,8 @@ allprojects {
+ }
+ 
+ ext {
+-    appId = "org.videolan.vlc"
++    // Stick Player: own application id (VLC for Android uses "org.videolan.vlc")
++    appId = "io.github.posn973.stickplayer"
+     versionCode = 3070200
+     vlcMajorVersion = project.hasProperty('forceVlc4') && project.getProperty('forceVlc4') ? 4 : 3
+     versionName = vlcMajorVersion == 3 ? '3.7.2' : '4.0.0-preview - ' + versionCode

@@ -1,0 +1,29 @@
+diff --git a/application/vlc-android/src/org/videolan/vlc/gui/helpers/UiTools.kt b/application/vlc-android/src/org/videolan/vlc/gui/helpers/UiTools.kt
+index 1eb697c..07f059f 100644
+--- a/application/vlc-android/src/org/videolan/vlc/gui/helpers/UiTools.kt
++++ b/application/vlc-android/src/org/videolan/vlc/gui/helpers/UiTools.kt
+@@ -178,6 +178,9 @@ import java.security.SecureRandom
+ import java.util.concurrent.TimeUnit
+ import kotlin.math.min
+ 
++/** Stick Player: project page (website and source code links in the About screen) */
++const val STICK_PLAYER_URL = "https://github.com/Posn973/StickPlayer"
++
+ object UiTools {
+     private var logoAnimationRunning: Boolean = false
+     var currentNightMode: Int = 0
+@@ -533,12 +536,12 @@ object UiTools {
+             AboutVersionDialog.newInstance().show(activity.supportFragmentManager, "AboutVersionDialog")
+         }
+         v.findViewById<View>(R.id.about_website_container).setOnClickListener {
+-            activity.openLinkIfPossible("https://www.videolan.org/vlc/")
++            activity.openLinkIfPossible(STICK_PLAYER_URL)
+         }
+         // Stick Player: no feedback / crash report sending (it would go to VideoLAN's support)
+         v.findViewById<View>(R.id.about_report_container).visibility = View.GONE
+         v.findViewById<View>(R.id.about_sources_container).setOnClickListener {
+-            activity.openLinkIfPossible("https://code.videolan.org/videolan/vlc-android")
++            activity.openLinkIfPossible(STICK_PLAYER_URL)
+         }
+ 
+         v.findViewById<View>(R.id.about_authors_container).setOnClickListener {

@@ -1,0 +1,107 @@
+diff --git a/application/television/src/main/java/org/videolan/television/ui/browser/BaseBrowserTvFragment.kt b/application/television/src/main/java/org/videolan/television/ui/browser/BaseBrowserTvFragment.kt
+index eb5471a..25052c5 100644
+--- a/application/television/src/main/java/org/videolan/television/ui/browser/BaseBrowserTvFragment.kt
++++ b/application/television/src/main/java/org/videolan/television/ui/browser/BaseBrowserTvFragment.kt
+@@ -83,6 +83,8 @@ abstract class BaseBrowserTvFragment<T> : Fragment(), BrowserFragmentInterface,
+     private var recyclerSectionItemGridDecoration: RecyclerSectionItemGridDecoration? = null
+     lateinit var binding: SongBrowserBinding
+     lateinit var viewModel: TvBrowserModel<T>
++    /** Set when the user picks "Random": focus the first item instead of following the moved one */
++    var focusTopOnNextUpdate = false
+     private var spacing: Int = 0
+     abstract var adapter: TvItemAdapter
+     lateinit var headerAdapter: MediaHeaderAdapter
+@@ -370,6 +372,7 @@ abstract class BaseBrowserTvFragment<T> : Fragment(), BrowserFragmentInterface,
+                 return true
+             }
+             R.id.ml_menu_sortby_random -> {
++                focusTopOnNextUpdate = true
+                 sortBy(SORT_RANDOM)
+                 return true
+             }
+diff --git a/application/television/src/main/java/org/videolan/television/ui/browser/FileBrowserTvFragment.kt b/application/television/src/main/java/org/videolan/television/ui/browser/FileBrowserTvFragment.kt
+index 0b5be35..6d8c5ee 100644
+--- a/application/television/src/main/java/org/videolan/television/ui/browser/FileBrowserTvFragment.kt
++++ b/application/television/src/main/java/org/videolan/television/ui/browser/FileBrowserTvFragment.kt
+@@ -133,7 +133,13 @@ class FileBrowserTvFragment : BaseBrowserTvFragment<MediaLibraryItem>(), PathAda
+             val lm = binding.list.layoutManager as LinearLayoutManager
+             val selectedItem = lm.focusedChild
+             submitList(items)
+-            binding.list.post {
++            if (focusTopOnNextUpdate) {
++                focusTopOnNextUpdate = false
++                binding.list.post {
++                    lm.scrollToPositionWithOffset(0, 0)
++                    binding.list.post { lm.findViewByPosition(0)?.requestFocus() }
++                }
++            } else binding.list.post {
+                 for (i in 0 until lm.childCount) {
+                     if (lm.getChildAt(i) == selectedItem) {
+                         lm.getChildAt(i)?.requestFocus()
+diff --git a/application/vlc-android/src/org/videolan/vlc/providers/BrowserProvider.kt b/application/vlc-android/src/org/videolan/vlc/providers/BrowserProvider.kt
+index 16af7c8..3e6856c 100644
+--- a/application/vlc-android/src/org/videolan/vlc/providers/BrowserProvider.kt
++++ b/application/vlc-android/src/org/videolan/vlc/providers/BrowserProvider.kt
+@@ -66,6 +66,7 @@ import org.videolan.tools.CoroutineContextProvider
+ import org.videolan.tools.DependencyProvider
+ import org.videolan.tools.Settings
+ import org.videolan.tools.livedata.LiveDataset
++import org.videolan.tools.putSingle
+ import org.videolan.vlc.R
+ import org.videolan.vlc.util.ModelsHelper
+ import org.videolan.vlc.util.TextUtils
+@@ -86,6 +87,7 @@ const val TAG = "VLC/BrowserProvider"
+ 
+ /** Random order (custom addition) */
+ const val SORT_RANDOM = 100
++private const val RANDOM_SEED_KEY = "browser_random_sort_seed"
+ 
+ abstract class BrowserProvider(val context: Context, val dataset: LiveDataset<MediaLibraryItem>, val url: String?, var sort:Int, var desc:Boolean) : CoroutineScope, HeaderProvider() {
+ 
+@@ -182,6 +184,7 @@ abstract class BrowserProvider(val context: Context, val dataset: LiveDataset<Me
+                 parseSubDirectories()
+             }
+             !list.isNullOrEmpty() -> {
++                if (sort == SORT_RANDOM) list?.let { sort(it) }
+                 dataset.value = list ?: return
+                 prefetchLists.remove(url)
+                 computeHeaders(list!!)
+@@ -215,9 +218,17 @@ abstract class BrowserProvider(val context: Context, val dataset: LiveDataset<Me
+      *
+      * @param files the files to sort
+      */
++    /** Called only when the user explicitly picks "Random" in the sort menu */
++    fun newRandomSeed() {
++        Settings.getInstance(context).putSingle(RANDOM_SEED_KEY, System.nanoTime())
++    }
++
+     fun sort(files: MutableList<MediaLibraryItem>) {
+         if (sort == SORT_RANDOM) {
+-            files.shuffle()
++            // Same seed + same files -> same order, so a refresh (e.g. back from the player) keeps the order.
++            files.sortWith(getFilenameAscComp(files.determineMaxNbOfDigits()))
++            val seed = Settings.getInstance(context).getLong(RANDOM_SEED_KEY, 0L) xor (url?.hashCode() ?: 0).toLong()
++            files.shuffle(kotlin.random.Random(seed))
+             return
+         }
+         getComparator(if (isComparatorAboutFilename())  files.determineMaxNbOfDigits() else 0)?.let { files.apply { this.sortWith(it) } } ?: if (desc) files.apply { reverse() } else { }
+diff --git a/application/vlc-android/src/org/videolan/vlc/viewmodels/browser/BrowserModel.kt b/application/vlc-android/src/org/videolan/vlc/viewmodels/browser/BrowserModel.kt
+index 17defce..433d544 100644
+--- a/application/vlc-android/src/org/videolan/vlc/viewmodels/browser/BrowserModel.kt
++++ b/application/vlc-android/src/org/videolan/vlc/viewmodels/browser/BrowserModel.kt
+@@ -37,6 +37,7 @@ import org.videolan.medialibrary.media.MediaLibraryItem
+ import org.videolan.tools.CoroutineContextProvider
+ import org.videolan.tools.Settings
+ import org.videolan.tools.putSingle
++import org.videolan.vlc.providers.SORT_RANDOM
+ import org.videolan.vlc.gui.helpers.MedialibraryUtils
+ import org.videolan.vlc.providers.BrowserProvider
+ import org.videolan.vlc.providers.FileBrowserProvider
+@@ -115,6 +116,7 @@ open class BrowserModel(
+             desc = if (sort == Medialibrary.SORT_DEFAULT) false else !desc
+             provider.sort = sort
+             provider.desc = desc
++            if (sort == SORT_RANDOM) provider.newRandomSeed()
+             dataset.value = withContext(coroutineContextProvider.Default) {
+                 val list = dataset.value.toMutableList()
+                 provider.sort(list)

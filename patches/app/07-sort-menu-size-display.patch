@@ -1,0 +1,274 @@
+diff --git a/application/resources/src/main/res/values-ja/strings.xml b/application/resources/src/main/res/values-ja/strings.xml
+index e3fc850..752f434 100644
+--- a/application/resources/src/main/res/values-ja/strings.xml
++++ b/application/resources/src/main/res/values-ja/strings.xml
+@@ -9,6 +9,10 @@
+     <string name="sortby">並び替え…</string>
+     <string name="sortby_name">名前</string>
+     <string name="sortby_filename">ファイル名</string>
++    <string name="sortby_name_az">名前（A→Z）</string>
++    <string name="sortby_name_za">名前（Z→A）</string>
++    <string name="sortby_size_large">ファイルサイズ（大きい順）</string>
++    <string name="sortby_size_small">ファイルサイズ（小さい順）</string>
+     <string name="sortby_random">ランダム</string>
+     <string name="sortby_artist_name">アーティスト名</string>
+     <string name="sortby_album_name">アルバム名</string>
+diff --git a/application/resources/src/main/res/values/strings.xml b/application/resources/src/main/res/values/strings.xml
+index 5c8969d..86f2314 100644
+--- a/application/resources/src/main/res/values/strings.xml
++++ b/application/resources/src/main/res/values/strings.xml
+@@ -10,6 +10,10 @@
+     <string name="sortby">Sort by…</string>
+     <string name="sortby_name">Name</string>
+     <string name="sortby_filename">File name</string>
++    <string name="sortby_name_az">Name (A → Z)</string>
++    <string name="sortby_name_za">Name (Z → A)</string>
++    <string name="sortby_size_large">File size (largest first)</string>
++    <string name="sortby_size_small">File size (smallest first)</string>
+     <string name="sortby_random">Random</string>
+     <string name="sortby_artist_name">Artist name</string>
+     <string name="sortby_album_name">Album name</string>
+diff --git a/application/television/src/main/java/org/videolan/television/ui/FileTvItemAdapter.kt b/application/television/src/main/java/org/videolan/television/ui/FileTvItemAdapter.kt
+index 57a22b4..2cbb180 100644
+--- a/application/television/src/main/java/org/videolan/television/ui/FileTvItemAdapter.kt
++++ b/application/television/src/main/java/org/videolan/television/ui/FileTvItemAdapter.kt
+@@ -30,6 +30,15 @@ import org.videolan.vlc.gui.helpers.getMediaIconDrawable
+ import org.videolan.vlc.gui.view.FastScroller
+ import org.videolan.vlc.interfaces.IEventsHandler
+ import org.videolan.vlc.util.generateResolutionClass
++import org.videolan.vlc.providers.BrowserFileSizes
++
++/** "1.24 GB · 1:23:45": file size first, then what VLC already showed */
++private fun withFileSize(context: Context, item: MediaLibraryItem?, description: String?): String? {
++    val mw = item as? MediaWrapper ?: return description
++    val size = BrowserFileSizes.sizeOf(mw) ?: return description
++    val sizeText = android.text.format.Formatter.formatFileSize(context, size)
++    return listOf(sizeText, description).filter { !it.isNullOrBlank() }.distinct().joinToString(" · ")
++}
+ 
+ class FileTvItemAdapter(private val eventsHandler: IEventsHandler<MediaLibraryItem>, var itemSize: Int, private val showProtocol: Boolean, private var inGrid: Boolean = true) : DiffUtilAdapter<MediaWrapper, MediaTvItemAdapter.AbstractMediaItemViewHolder<ViewDataBinding>>(), FastScroller.SeparatedAdapter, TvItemAdapter {
+ 
+@@ -200,7 +209,7 @@ class FileTvItemAdapter(private val eventsHandler: IEventsHandler<MediaLibraryIt
+             binding.progress = progress
+             binding.isSquare = true
+             binding.seen = seen
+-            binding.description = description
++            binding.description = withFileSize(binding.root.context, item, description)
+             if (showProtocol && item is MediaWrapper) binding.protocol = getProtocol(item)
+             val cover = if (item is MediaWrapper) getMediaIconDrawable(binding.root.context, item.type, true) else defaultCover
+             cover?.let { binding.cover = it }
+@@ -284,7 +293,7 @@ class FileTvItemAdapter(private val eventsHandler: IEventsHandler<MediaLibraryIt
+             binding.progress = progress
+             binding.isSquare = isSquare
+             binding.seen = seen
+-            binding.description = description
++            binding.description = withFileSize(binding.root.context, item, description)
+             if (showProtocol && item is MediaWrapper) binding.protocol = getProtocol(item)
+             val cover = if (item is MediaWrapper) getMediaIconDrawable(binding.root.context, item.type, true) else defaultCover
+             cover?.let { binding.cover = it }
+diff --git a/application/television/src/main/java/org/videolan/television/ui/browser/BaseBrowserTvFragment.kt b/application/television/src/main/java/org/videolan/television/ui/browser/BaseBrowserTvFragment.kt
+index 5c745fe..8149770 100644
+--- a/application/television/src/main/java/org/videolan/television/ui/browser/BaseBrowserTvFragment.kt
++++ b/application/television/src/main/java/org/videolan/television/ui/browser/BaseBrowserTvFragment.kt
+@@ -335,8 +335,25 @@ abstract class BaseBrowserTvFragment<T> : Fragment(), BrowserFragmentInterface,
+         menu.menu.findItem(R.id.ml_menu_sortby_date).isVisible = (viewModel as SortableModel).canSortByReleaseDate()
+         menu.menu.findItem(R.id.ml_menu_sortby_last_modified).isVisible = (viewModel as SortableModel).canSortByLastModified()
+         menu.menu.findItem(R.id.ml_menu_sortby_number).isVisible = false
+-        menu.menu.findItem(R.id.ml_menu_sortby_random).isVisible = viewModel is BrowserModel
+-        menu.menu.findItem(R.id.ml_menu_sortby_filesize).isVisible = viewModel is BrowserModel
++        val browserModel = viewModel as? BrowserModel
++        val isBrowser = browserModel != null
++        // File browser: name / size with a fixed direction each; other screens keep the original "Name" toggle
++        menu.menu.findItem(R.id.ml_menu_sortby_name).isVisible = !isBrowser
++        menu.menu.findItem(R.id.ml_menu_sortby_name_az).isVisible = isBrowser
++        menu.menu.findItem(R.id.ml_menu_sortby_name_za).isVisible = isBrowser
++        menu.menu.findItem(R.id.ml_menu_sortby_size_large).isVisible = isBrowser
++        menu.menu.findItem(R.id.ml_menu_sortby_size_small).isVisible = isBrowser
++        menu.menu.findItem(R.id.ml_menu_sortby_random).isVisible = isBrowser
++        browserModel?.let { model ->
++            val currentId = when (model.sort) {
++                SORT_RANDOM -> R.id.ml_menu_sortby_random
++                Medialibrary.SORT_FILESIZE -> if (model.desc) R.id.ml_menu_sortby_size_large else R.id.ml_menu_sortby_size_small
++                Medialibrary.SORT_ALPHA, Medialibrary.SORT_DEFAULT -> if (model.desc) R.id.ml_menu_sortby_name_za else R.id.ml_menu_sortby_name_az
++                Medialibrary.SORT_FILENAME -> R.id.ml_menu_sortby_filename
++                else -> 0
++            }
++            if (currentId != 0) menu.menu.findItem(currentId)?.let { it.title = "✓ ${it.title}" }
++        }
+         menu.setOnMenuItemClickListener(this)
+         menu.show()
+     }
+@@ -372,12 +389,24 @@ abstract class BaseBrowserTvFragment<T> : Fragment(), BrowserFragmentInterface,
+                 sortBy(Medialibrary.SORT_ALBUM)
+                 return true
+             }
+-            R.id.ml_menu_sortby_filesize -> {
+-                sortBy(Medialibrary.SORT_FILESIZE)
++            R.id.ml_menu_sortby_name_az -> {
++                sortWithOrder(Medialibrary.SORT_ALPHA, false)
++                return true
++            }
++            R.id.ml_menu_sortby_name_za -> {
++                sortWithOrder(Medialibrary.SORT_ALPHA, true)
++                return true
++            }
++            R.id.ml_menu_sortby_size_large -> {
++                sortWithOrder(Medialibrary.SORT_FILESIZE, true)
++                return true
++            }
++            R.id.ml_menu_sortby_size_small -> {
++                sortWithOrder(Medialibrary.SORT_FILESIZE, false)
+                 return true
+             }
+             R.id.ml_menu_sortby_random -> {
+-                sortBy(SORT_RANDOM)
++                sortWithOrder(SORT_RANDOM, false)
+                 return true
+             }
+             R.id.ml_menu_sortby_number -> {
+@@ -388,6 +417,12 @@ abstract class BaseBrowserTvFragment<T> : Fragment(), BrowserFragmentInterface,
+         }
+     }
+ 
++    private fun sortWithOrder(sort: Int, desc: Boolean) {
++        val model = viewModel as? BrowserModel ?: return sortBy(sort)
++        focusTopOnNextUpdate = true
++        model.sortWithOrder(sort, desc)
++    }
++
+     private fun sortBy(sort: Int) {
+         // Any sort picked from the menu: redraw the whole list at once and focus the first item
+         focusTopOnNextUpdate = true
+diff --git a/application/vlc-android/res/menu/sort_options.xml b/application/vlc-android/res/menu/sort_options.xml
+index d283252..d98f70f 100644
+--- a/application/vlc-android/res/menu/sort_options.xml
++++ b/application/vlc-android/res/menu/sort_options.xml
+@@ -3,6 +3,18 @@
+     <item
+         android:id="@+id/ml_menu_sortby_name"
+         android:title="@string/sortby_name" />
++    <item
++        android:id="@+id/ml_menu_sortby_name_az"
++        android:title="@string/sortby_name_az" />
++    <item
++        android:id="@+id/ml_menu_sortby_name_za"
++        android:title="@string/sortby_name_za" />
++    <item
++        android:id="@+id/ml_menu_sortby_size_large"
++        android:title="@string/sortby_size_large" />
++    <item
++        android:id="@+id/ml_menu_sortby_size_small"
++        android:title="@string/sortby_size_small" />
+     <item
+         android:id="@+id/ml_menu_sortby_filename"
+         android:title="@string/sortby_filename" />
+@@ -21,9 +33,6 @@
+     <item
+         android:id="@+id/ml_menu_sortby_number"
+         android:title="@string/sortby_number" />
+-    <item
+-        android:id="@+id/ml_menu_sortby_filesize"
+-        android:title="@string/file_size" />
+     <item
+         android:id="@+id/ml_menu_sortby_random"
+         android:title="@string/sortby_random" />
+diff --git a/application/vlc-android/src/org/videolan/vlc/interfaces/Sortable.kt b/application/vlc-android/src/org/videolan/vlc/interfaces/Sortable.kt
+index d520118..ed59c9c 100644
+--- a/application/vlc-android/src/org/videolan/vlc/interfaces/Sortable.kt
++++ b/application/vlc-android/src/org/videolan/vlc/interfaces/Sortable.kt
+@@ -22,7 +22,10 @@ interface Sortable : PopupMenu.OnMenuItemClickListener {
+         menu.menu.findItem(R.id.ml_menu_sortby_last_modified).isVisible = vm.canSortByLastModified()
+         menu.menu.findItem(R.id.ml_menu_sortby_number).isVisible = false
+         menu.menu.findItem(R.id.ml_menu_sortby_random).isVisible = false
+-        menu.menu.findItem(R.id.ml_menu_sortby_filesize).isVisible = false
++        menu.menu.findItem(R.id.ml_menu_sortby_name_az).isVisible = false
++        menu.menu.findItem(R.id.ml_menu_sortby_name_za).isVisible = false
++        menu.menu.findItem(R.id.ml_menu_sortby_size_large).isVisible = false
++        menu.menu.findItem(R.id.ml_menu_sortby_size_small).isVisible = false
+         menu.setOnMenuItemClickListener(this)
+         menu.show()
+     }
+diff --git a/application/vlc-android/src/org/videolan/vlc/providers/BrowserProvider.kt b/application/vlc-android/src/org/videolan/vlc/providers/BrowserProvider.kt
+index 1316840..9d2857e 100644
+--- a/application/vlc-android/src/org/videolan/vlc/providers/BrowserProvider.kt
++++ b/application/vlc-android/src/org/videolan/vlc/providers/BrowserProvider.kt
+@@ -91,6 +91,18 @@ private const val RANDOM_SEED_KEY = "browser_random_sort_seed"
+ /** Prefix written by the patched smb2/dsm modules in the EncodedBy meta */
+ private const val SIZE_META_PREFIX = "vlcsize:"
+ 
++/** File sizes shared with the TV list (local: read from disk, SMB: sent by the patched libvlc) */
++object BrowserFileSizes {
++    internal val remote = java.util.concurrent.ConcurrentHashMap<String, Long>()
++
++    fun sizeOf(mw: MediaWrapper): Long? {
++        if (mw.type == MediaWrapper.TYPE_DIR) return null
++        val uri = mw.uri ?: return null
++        val size = if (uri.scheme == "file") uri.path?.let { File(it).length() } else remote[uri.toString()]
++        return size?.takeIf { it > 0L }
++    }
++}
++
+ abstract class BrowserProvider(val context: Context, val dataset: LiveDataset<MediaLibraryItem>, val url: String?, var sort:Int, var desc:Boolean) : CoroutineScope, HeaderProvider() {
+ 
+     override val coroutineContext = Dispatchers.Main.immediate + SupervisorJob()
+@@ -230,11 +242,7 @@ abstract class BrowserProvider(val context: Context, val dataset: LiveDataset<Me
+         val sizes = java.util.IdentityHashMap<MediaLibraryItem, Long>(files.size)
+         for (item in files) {
+             val mw = item as? MediaWrapper
+-            sizes[item] = when {
+-                mw == null || mw.type == MediaWrapper.TYPE_DIR -> 0L
+-                mw.uri?.scheme == "file" -> mw.uri?.path?.let { File(it).length() } ?: 0L
+-                else -> remoteSizes[mw.uri?.toString()] ?: 0L // SMB: size sent by the patched libvlc
+-            }
++            sizes[item] = mw?.let { BrowserFileSizes.sizeOf(it) } ?: 0L
+         }
+         val byName = getFilenameAscComp(files.determineMaxNbOfDigits())
+         val isDir = { item: MediaLibraryItem -> (item as? MediaWrapper)?.type == MediaWrapper.TYPE_DIR }
+@@ -253,9 +261,6 @@ abstract class BrowserProvider(val context: Context, val dataset: LiveDataset<Me
+         })
+     }
+ 
+-    /** File sizes of network (SMB) files, keyed by uri */
+-    private val remoteSizes = java.util.concurrent.ConcurrentHashMap<String, Long>()
+-
+     /** Called only when the user explicitly picks "Random" in the sort menu */
+     fun newRandomSeed() {
+         Settings.getInstance(context).putSingle(RANDOM_SEED_KEY, System.nanoTime())
+@@ -426,6 +431,7 @@ abstract class BrowserProvider(val context: Context, val dataset: LiveDataset<Me
+     }
+ 
+     private fun parseMediaSize(mw:MediaWrapper):Long? {
++        if (mw.uri?.scheme != "file") BrowserFileSizes.sizeOf(mw)?.let { return it }
+         mw.uri?.path?.let {
+             return File(it).length()
+         }
+@@ -454,7 +460,7 @@ abstract class BrowserProvider(val context: Context, val dataset: LiveDataset<Me
+         try {
+             media.getMeta(IMedia.Meta.EncodedBy, true)?.takeIf { it.startsWith(SIZE_META_PREFIX) }
+                 ?.removePrefix(SIZE_META_PREFIX)?.toLongOrNull()
+-                ?.let { size -> mw.uri?.toString()?.let { remoteSizes[it] = size } }
++                ?.let { size -> mw.uri?.toString()?.let { BrowserFileSizes.remote[it] = size } }
+         } catch (e: Exception) {
+         }
+         media.release()
+diff --git a/application/vlc-android/src/org/videolan/vlc/viewmodels/browser/BrowserModel.kt b/application/vlc-android/src/org/videolan/vlc/viewmodels/browser/BrowserModel.kt
+index 433d544..38d9c55 100644
+--- a/application/vlc-android/src/org/videolan/vlc/viewmodels/browser/BrowserModel.kt
++++ b/application/vlc-android/src/org/videolan/vlc/viewmodels/browser/BrowserModel.kt
+@@ -111,9 +111,15 @@ open class BrowserModel(
+ 
+     @MainThread
+     override fun sort(sort: Int) {
++        sortWithOrder(sort, if (sort == Medialibrary.SORT_DEFAULT) false else !desc)
++    }
++
++    /** Sort with an explicit direction (used by the "A→Z / Z→A", "largest / smallest" menu items) */
++    @MainThread
++    fun sortWithOrder(sort: Int, desc: Boolean) {
+         viewModelScope.launch {
+             this@BrowserModel.sort = sort
+-            desc = if (sort == Medialibrary.SORT_DEFAULT) false else !desc
++            this@BrowserModel.desc = desc
+             provider.sort = sort
+             provider.desc = desc
+             if (sort == SORT_RANDOM) provider.newRandomSeed()

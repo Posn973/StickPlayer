@@ -1,0 +1,132 @@
+diff --git a/application/television/src/main/java/org/videolan/television/ui/browser/BaseBrowserTvFragment.kt b/application/television/src/main/java/org/videolan/television/ui/browser/BaseBrowserTvFragment.kt
+index aa367d6..5c745fe 100644
+--- a/application/television/src/main/java/org/videolan/television/ui/browser/BaseBrowserTvFragment.kt
++++ b/application/television/src/main/java/org/videolan/television/ui/browser/BaseBrowserTvFragment.kt
+@@ -336,6 +336,7 @@ abstract class BaseBrowserTvFragment<T> : Fragment(), BrowserFragmentInterface,
+         menu.menu.findItem(R.id.ml_menu_sortby_last_modified).isVisible = (viewModel as SortableModel).canSortByLastModified()
+         menu.menu.findItem(R.id.ml_menu_sortby_number).isVisible = false
+         menu.menu.findItem(R.id.ml_menu_sortby_random).isVisible = viewModel is BrowserModel
++        menu.menu.findItem(R.id.ml_menu_sortby_filesize).isVisible = viewModel is BrowserModel
+         menu.setOnMenuItemClickListener(this)
+         menu.show()
+     }
+@@ -371,6 +372,10 @@ abstract class BaseBrowserTvFragment<T> : Fragment(), BrowserFragmentInterface,
+                 sortBy(Medialibrary.SORT_ALBUM)
+                 return true
+             }
++            R.id.ml_menu_sortby_filesize -> {
++                sortBy(Medialibrary.SORT_FILESIZE)
++                return true
++            }
+             R.id.ml_menu_sortby_random -> {
+                 sortBy(SORT_RANDOM)
+                 return true
+diff --git a/application/vlc-android/res/menu/sort_options.xml b/application/vlc-android/res/menu/sort_options.xml
+index 6cc6c7c..d283252 100644
+--- a/application/vlc-android/res/menu/sort_options.xml
++++ b/application/vlc-android/res/menu/sort_options.xml
+@@ -21,6 +21,9 @@
+     <item
+         android:id="@+id/ml_menu_sortby_number"
+         android:title="@string/sortby_number" />
++    <item
++        android:id="@+id/ml_menu_sortby_filesize"
++        android:title="@string/file_size" />
+     <item
+         android:id="@+id/ml_menu_sortby_random"
+         android:title="@string/sortby_random" />
+diff --git a/application/vlc-android/src/org/videolan/vlc/interfaces/Sortable.kt b/application/vlc-android/src/org/videolan/vlc/interfaces/Sortable.kt
+index b977529..d520118 100644
+--- a/application/vlc-android/src/org/videolan/vlc/interfaces/Sortable.kt
++++ b/application/vlc-android/src/org/videolan/vlc/interfaces/Sortable.kt
+@@ -22,6 +22,7 @@ interface Sortable : PopupMenu.OnMenuItemClickListener {
+         menu.menu.findItem(R.id.ml_menu_sortby_last_modified).isVisible = vm.canSortByLastModified()
+         menu.menu.findItem(R.id.ml_menu_sortby_number).isVisible = false
+         menu.menu.findItem(R.id.ml_menu_sortby_random).isVisible = false
++        menu.menu.findItem(R.id.ml_menu_sortby_filesize).isVisible = false
+         menu.setOnMenuItemClickListener(this)
+         menu.show()
+     }
+diff --git a/application/vlc-android/src/org/videolan/vlc/providers/BrowserProvider.kt b/application/vlc-android/src/org/videolan/vlc/providers/BrowserProvider.kt
+index 3e6856c..812f6af 100644
+--- a/application/vlc-android/src/org/videolan/vlc/providers/BrowserProvider.kt
++++ b/application/vlc-android/src/org/videolan/vlc/providers/BrowserProvider.kt
+@@ -107,6 +107,7 @@ abstract class BrowserProvider(val context: Context, val dataset: LiveDataset<Me
+     internal val medialibrary = Medialibrary.getInstance()
+     fun isComparatorAboutFilename() = when {
+         sort == SORT_RANDOM -> false
++        sort == Medialibrary.SORT_FILESIZE -> false
+         Settings.showTvUi && sort == Medialibrary.SORT_ALPHA && desc -> false
+         Settings.showTvUi && sort == Medialibrary.SORT_ALPHA && !desc -> false
+         sort == Medialibrary.SORT_ALPHA && desc -> false
+@@ -116,6 +117,7 @@ abstract class BrowserProvider(val context: Context, val dataset: LiveDataset<Me
+     }
+     fun getComparator(nbOfDigits: Int): Comparator<MediaLibraryItem>? = when {
+             sort == SORT_RANDOM -> null
++            sort == Medialibrary.SORT_FILESIZE -> null
+             Settings.showTvUi && sort in arrayOf(Medialibrary.SORT_ALPHA, Medialibrary.SORT_DEFAULT) && desc -> getTvDescComp(Settings.tvFoldersFirst)
+             Settings.showTvUi && sort in arrayOf(Medialibrary.SORT_ALPHA, Medialibrary.SORT_DEFAULT) && !desc -> getTvAscComp(Settings.tvFoldersFirst)
+             url != null && url.toUri().scheme == "upnp" -> null
+@@ -184,7 +186,7 @@ abstract class BrowserProvider(val context: Context, val dataset: LiveDataset<Me
+                 parseSubDirectories()
+             }
+             !list.isNullOrEmpty() -> {
+-                if (sort == SORT_RANDOM) list?.let { sort(it) }
++                if (sort == SORT_RANDOM || sort == Medialibrary.SORT_FILESIZE) list?.let { sort(it) }
+                 dataset.value = list ?: return
+                 prefetchLists.remove(url)
+                 computeHeaders(list!!)
+@@ -218,12 +220,44 @@ abstract class BrowserProvider(val context: Context, val dataset: LiveDataset<Me
+      *
+      * @param files the files to sort
+      */
++    /**
++     * Folders first (by name), then files by size. Sizes are read once per sort (local files only;
++     * network files have no known size and are placed as 0 bytes). Same size -> by file name.
++     */
++    private fun sortBySize(files: MutableList<MediaLibraryItem>) {
++        val sizes = java.util.IdentityHashMap<MediaLibraryItem, Long>(files.size)
++        for (item in files) {
++            val mw = item as? MediaWrapper
++            sizes[item] = if (mw == null || mw.type == MediaWrapper.TYPE_DIR || mw.uri?.scheme != "file") 0L
++            else mw.uri?.path?.let { File(it).length() } ?: 0L
++        }
++        val byName = getFilenameAscComp(files.determineMaxNbOfDigits())
++        val isDir = { item: MediaLibraryItem -> (item as? MediaWrapper)?.type == MediaWrapper.TYPE_DIR }
++        files.sortWith(Comparator { a, b ->
++            val da = isDir(a)
++            val db = isDir(b)
++            when {
++                da && !db -> -1
++                !da && db -> 1
++                da && db -> byName.compare(a, b)
++                else -> {
++                    val c = (sizes[a] ?: 0L).compareTo(sizes[b] ?: 0L)
++                    if (c != 0) (if (desc) -c else c) else byName.compare(a, b)
++                }
++            }
++        })
++    }
++
+     /** Called only when the user explicitly picks "Random" in the sort menu */
+     fun newRandomSeed() {
+         Settings.getInstance(context).putSingle(RANDOM_SEED_KEY, System.nanoTime())
+     }
+ 
+     fun sort(files: MutableList<MediaLibraryItem>) {
++        if (sort == Medialibrary.SORT_FILESIZE) {
++            sortBySize(files)
++            return
++        }
+         if (sort == SORT_RANDOM) {
+             // Same seed + same files -> same order, so a refresh (e.g. back from the player) keeps the order.
+             files.sortWith(getFilenameAscComp(files.determineMaxNbOfDigits()))
+@@ -301,7 +335,7 @@ abstract class BrowserProvider(val context: Context, val dataset: LiveDataset<Me
+ 
+     open fun computeHeaders(value: List<MediaLibraryItem>) {
+         privateHeaders.clear()
+-        if (sort != SORT_RANDOM) for ((position, item) in value.withIndex()) {
++        if (sort != SORT_RANDOM && sort != Medialibrary.SORT_FILESIZE) for ((position, item) in value.withIndex()) {
+             val previous = when {
+                 position > 0 -> value[position - 1]
+                 else -> null

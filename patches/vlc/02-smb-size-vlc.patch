@@ -1,0 +1,151 @@
+diff --git a/modules/access/dsm/access.c b/modules/access/dsm/access.c
+index fcf5625..64fa27e 100644
+--- a/modules/access/dsm/access.c
++++ b/modules/access/dsm/access.c
+@@ -36,6 +36,7 @@
+ #include <vlc_keystore.h>
+ #include <vlc_network.h>
+ #include <vlc_interrupt.h>
++#include <vlc_input_item.h>
+ 
+ #include <assert.h>
+ #include <errno.h>
+@@ -117,7 +118,7 @@ static int get_address( stream_t *p_access );
+ static int login( stream_t *p_access );
+ static bool get_path( stream_t *p_access );
+ static int add_item( stream_t *p_access,  struct vlc_readdir_helper *p_rdh,
+-                     const char *psz_name, int i_type );
++                     const char *psz_name, int i_type, uint64_t i_size );
+ 
+ struct access_sys_t
+ {
+@@ -688,8 +689,25 @@ static int Control( stream_t *p_access, int i_query, va_list args )
+     return VLC_SUCCESS;
+ }
+ 
++/* Custom addition: pass the file size to the app through the item's
++ * "EncodedBy" meta ("vlcsize:<bytes>"), since VLC 3 has no item stat API. */
++static void SetLastItemSize(struct vlc_readdir_helper *p_rdh, const char *psz_uri,
++                            uint64_t i_size)
++{
++    input_item_node_t *p_parent = p_rdh->p_node;
++    if (p_parent == NULL || p_parent->i_children <= 0)
++        return;
++    input_item_t *p_item = p_parent->pp_children[p_parent->i_children - 1]->p_item;
++    if (p_item == NULL || p_item->psz_uri == NULL
++     || strcmp(p_item->psz_uri, psz_uri) != 0)
++        return;
++    char psz_size[32];
++    snprintf(psz_size, sizeof(psz_size), "vlcsize:%" PRIu64, i_size);
++    input_item_SetMeta(p_item, vlc_meta_EncodedBy, psz_size);
++}
++
+ static int add_item( stream_t *p_access, struct vlc_readdir_helper *p_rdh,
+-                     const char *psz_name, int i_type )
++                     const char *psz_name, int i_type, uint64_t i_size )
+ {
+     char         *psz_uri;
+     int           i_ret;
+@@ -706,8 +724,12 @@ static int add_item( stream_t *p_access, struct vlc_readdir_helper *p_rdh,
+     if( i_ret == -1 )
+         return VLC_ENOMEM;
+ 
+-    return vlc_readdir_helper_additem( p_rdh, psz_uri, NULL, psz_name, i_type,
+-                                       ITEM_NET );
++    i_ret = vlc_readdir_helper_additem( p_rdh, psz_uri, NULL, psz_name, i_type,
++                                        ITEM_NET );
++    if( i_ret == VLC_SUCCESS && i_type == ITEM_TYPE_FILE )
++        SetLastItemSize( p_rdh, psz_uri, i_size );
++    free( psz_uri );
++    return i_ret;
+ }
+ 
+ static int BrowseShare( stream_t *p_access, input_item_node_t *p_node )
+@@ -739,7 +761,7 @@ static int BrowseShare( stream_t *p_access, input_item_node_t *p_node )
+         if( psz_name[strlen( psz_name ) - 1] == '$')
+             continue;
+ 
+-        i_ret = add_item( p_access, &rdh, psz_name, ITEM_TYPE_DIRECTORY );
++        i_ret = add_item( p_access, &rdh, psz_name, ITEM_TYPE_DIRECTORY, 0 );
+     }
+ 
+     vlc_readdir_helper_finish( &rdh, i_ret == VLC_SUCCESS );
+@@ -797,7 +819,8 @@ static int BrowseDirectory( stream_t *p_access, input_item_node_t *p_node )
+ 
+         i_type = smb_stat_get( st, SMB_STAT_ISDIR ) ?
+                  ITEM_TYPE_DIRECTORY : ITEM_TYPE_FILE;
+-        i_ret = add_item( p_access, &rdh, psz_name, i_type );
++        i_ret = add_item( p_access, &rdh, psz_name, i_type,
++                          smb_stat_get( st, SMB_STAT_SIZE ) );
+     }
+ 
+     vlc_readdir_helper_finish( &rdh, i_ret == VLC_SUCCESS );
+diff --git a/modules/access/smb2.c b/modules/access/smb2.c
+index 6254fd8..536bffb 100644
+--- a/modules/access/smb2.c
++++ b/modules/access/smb2.c
+@@ -26,6 +26,8 @@
+ #include <errno.h>
+ #include <stdint.h>
+ #include <stdlib.h>
++#include <string.h>
++#include <inttypes.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include <fcntl.h>
+@@ -444,8 +446,26 @@ vlc_smb2_get_url(vlc_url_t *url, const char *file)
+     return buf.ptr;
+ }
+ 
++
++/* Custom addition: pass the file size to the app through the item's
++ * "EncodedBy" meta ("vlcsize:<bytes>"), since VLC 3 has no item stat API. */
++static void SetLastItemSize(struct vlc_readdir_helper *p_rdh, const char *psz_uri,
++                            uint64_t i_size)
++{
++    input_item_node_t *p_parent = p_rdh->p_node;
++    if (p_parent == NULL || p_parent->i_children <= 0)
++        return;
++    input_item_t *p_item = p_parent->pp_children[p_parent->i_children - 1]->p_item;
++    if (p_item == NULL || p_item->psz_uri == NULL
++     || strcmp(p_item->psz_uri, psz_uri) != 0)
++        return;
++    char psz_size[32];
++    snprintf(psz_size, sizeof(psz_size), "vlcsize:%" PRIu64, i_size);
++    input_item_SetMeta(p_item, vlc_meta_EncodedBy, psz_size);
++}
++
+ static int AddItem(stream_t *access, struct vlc_readdir_helper *rdh,
+-                   const char *name, int i_type)
++                   const char *name, int i_type, uint64_t i_size)
+ {
+     struct access_sys *sys = access->p_sys;
+     char *name_encoded = vlc_uri_encode(name);
+@@ -459,6 +479,8 @@ static int AddItem(stream_t *access, struct vlc_readdir_helper *rdh,
+ 
+     int ret = vlc_readdir_helper_additem(rdh, url, NULL, name, i_type,
+                                          ITEM_NET);
++    if (ret == VLC_SUCCESS && i_type == ITEM_TYPE_FILE)
++        SetLastItemSize(rdh, url, i_size);
+     free(url);
+     return ret;
+ }
+@@ -490,7 +512,8 @@ DirRead(stream_t *access, input_item_node_t *p_node)
+             i_type = ITEM_TYPE_UNKNOWN;
+             break;
+         }
+-        ret = AddItem(access, &rdh, smb2dirent->name, i_type);
++        ret = AddItem(access, &rdh, smb2dirent->name, i_type,
++                      smb2dirent->st.smb2_size);
+     }
+ 
+     vlc_readdir_helper_finish(&rdh, ret == VLC_SUCCESS);
+@@ -534,7 +557,7 @@ ShareEnum(stream_t *access, input_item_node_t *p_node)
+        switch (type & 0x3)
+        {
+            case SHARE_TYPE_DISKTREE:
+-               ret = AddItem(access, &rdh, name, ITEM_TYPE_DIRECTORY);
++               ret = AddItem(access, &rdh, name, ITEM_TYPE_DIRECTORY, 0);
+                break;
+        }
+     }
